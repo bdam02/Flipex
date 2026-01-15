@@ -5,115 +5,128 @@
 <title>Flipex</title>
 
 <style>
-body {
-  margin: 0;
-  height: 100vh;
-  background: linear-gradient(180deg, #060606, #0b0b0b);
-  font-family: Inter, Arial, sans-serif;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+body{
+  margin:0;
+  height:100vh;
+  background:linear-gradient(180deg,#070707,#0c0c0c);
+  font-family:Inter,Arial,sans-serif;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-.warning {
-  position: fixed;
-  top: 16px;
-  right: 22px;
-  font-size: 12px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  background: rgba(255,80,80,0.15);
-  border: 1px solid rgba(255,80,80,0.35);
-  color: #ffb3b3;
+.warning{
+  position:fixed;
+  top:16px;
+  right:22px;
+  font-size:12px;
+  padding:6px 12px;
+  border-radius:20px;
+  background:rgba(255,80,80,.15);
+  border:1px solid rgba(255,80,80,.35);
+  color:#ffb3b3;
 }
 
-.container {
-  text-align: center;
-  animation: fade 1s ease;
+.container{text-align:center;animation:fade 1s ease}
+
+.logo{
+  width:82px;height:82px;margin:auto;
+  border-radius:24px;
+  background:linear-gradient(135deg,#00ffd5,#4c6cff);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:32px;color:#050505;
+  box-shadow:0 0 45px rgba(0,255,220,.4);
 }
 
-.logo {
-  width: 80px;
-  height: 80px;
-  margin: auto;
-  border-radius: 24px;
-  background: linear-gradient(135deg,#00ffd5,#4c6cff);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  font-size: 32px;
-  color: #050505;
-  box-shadow: 0 0 45px rgba(0,255,220,0.4);
+h1{margin:18px 0 28px;font-size:46px}
+
+.card{
+  background:#fdfdfd;color:#000;
+  width:480px;padding:26px;
+  border-radius:18px;
+  box-shadow:0 30px 90px rgba(0,0,0,.5);
 }
 
-h1 {
-  margin: 20px 0 30px;
-  font-size: 46px;
+label{display:block;text-align:left;font-weight:600;margin-bottom:6px}
+
+input{
+  width:100%;padding:12px;border-radius:8px;
+  border:1px solid #ccc;font-size:15px;
 }
 
-.card {
-  background: #fdfdfd;
-  color: #000;
-  width: 460px;
-  padding: 26px;
-  border-radius: 18px;
-  box-shadow: 0 30px 90px rgba(0,0,0,0.5);
+.buttons{display:flex;gap:10px;margin-top:14px}
+
+button{
+  flex:1;padding:12px;border:none;border-radius:8px;
+  font-weight:600;cursor:pointer;
+  background:linear-gradient(135deg,#4c6cff,#00ffd5);
 }
 
-label {
-  display: block;
-  text-align: left;
-  font-weight: 600;
-  margin-bottom: 6px;
+.secondary{
+  background:#e6e6e6;
 }
 
-input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 15px;
+button:hover{opacity:.9}
+
+.status{margin-top:14px;font-size:13px;color:#444}
+
+.output{
+  margin-top:18px;
+  font-family:ui-monospace,monospace;
+  font-size:14px;text-align:left;
 }
 
-button {
-  width: 100%;
-  margin-top: 14px;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  background: linear-gradient(135deg,#4c6cff,#00ffd5);
-  cursor: pointer;
+/* SETTINGS */
+.settings-btn{
+  position:absolute;top:22px;left:22px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.2);
+  color:white;border-radius:50%;
+  width:38px;height:38px;cursor:pointer;
 }
 
-button:hover {
-  opacity: 0.9;
+.settings{
+  position:fixed;top:70px;left:22px;
+  background:#111;border:1px solid #222;
+  padding:14px;border-radius:14px;
+  width:220px;display:none;
 }
 
-.status {
-  margin-top: 16px;
-  font-size: 13px;
-  color: #444;
+.settings label{
+  color:#ccc;font-size:13px;
 }
 
-.output {
-  margin-top: 18px;
-  font-family: ui-monospace, monospace;
-  font-size: 14px;
+.settings select, .settings input{
+  width:100%;margin-top:6px;margin-bottom:12px;
+  padding:6px;border-radius:6px;border:none;
 }
 
-@keyframes fade {
-  from {opacity:0}
-  to {opacity:1}
-}
+@keyframes fade{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 
 <body>
 
 <div class="warning">⚠️ This site is a prank</div>
+
+<button class="settings-btn" onclick="toggleSettings()">⚙️</button>
+
+<div class="settings" id="settings">
+  <label>Animation speed</label>
+  <select id="speed">
+    <option value="600">Normal</option>
+    <option value="400">Fast</option>
+  </select>
+
+  <label><input type="checkbox" id="location"> Show location</label>
+
+  <label>Theme</label>
+  <select id="theme" onchange="themeChange()">
+    <option value="blue">Blue</option>
+    <option value="purple">Purple</option>
+  </select>
+</div>
 
 <div class="container">
   <div class="logo">FX</div>
@@ -122,7 +135,11 @@ button:hover {
   <div class="card">
     <label>Discord user</label>
     <input id="user" placeholder="username#0000">
-    <button onclick="start()">Start scan</button>
+
+    <div class="buttons">
+      <button onclick="start()">Start scan</button>
+      <button class="secondary" onclick="clearOut()">Clear</button>
+    </div>
 
     <div class="status">
       API: Online • Database: Connected • Network: Stable
@@ -135,42 +152,65 @@ button:hover {
 <script>
 const out = document.getElementById("out");
 
-async function start() {
-  out.innerHTML = "";
+function toggleSettings(){
+  const s=document.getElementById("settings");
+  s.style.display=s.style.display==="block"?"none":"block";
+}
+
+async function start(){
+  out.innerHTML="";
   await step("Initializing scan");
   await step("Searching user");
   await step("Locating network node");
   await step("Fetching IP data");
-  out.innerHTML += `<div><strong>USER IP:</strong> ${fakeIP()}</div>`;
+  out.innerHTML+=`<div><strong>USER IP:</strong> ${fakeIP()}</div>`;
+  if(document.getElementById("location").checked){
+    out.innerHTML+=`<div><strong>Location:</strong> ${fakeCountry()}</div>`;
+  }
 }
 
-function step(text) {
-  return new Promise(res => {
-    let dots = 0;
-    const line = document.createElement("div");
+function clearOut(){out.innerHTML=""}
+
+function step(text){
+  return new Promise(res=>{
+    let dots=0;
+    const speed=parseInt(document.getElementById("speed").value);
+    const line=document.createElement("div");
     out.appendChild(line);
-    const i = setInterval(() => {
+    const i=setInterval(()=>{
       dots++;
-      line.textContent = text + ".".repeat(dots);
-      if (dots === 3) {
+      line.textContent=text+".".repeat(dots);
+      if(dots===3){
         clearInterval(i);
-        setTimeout(res, 800);
+        setTimeout(res,600);
       }
-    }, 800);
+    },speed);
   });
 }
 
-function fakeIP() {
+function fakeIP(){
   return `${r(1,223)}.${r(0,255)}.${r(0,255)}.${r(1,254)}`;
 }
 
-function r(min,max){
-  return Math.floor(Math.random()*(max-min+1))+min;
+function fakeCountry(){
+  const c=["Canada","France","Germany","Japan","Brazil","UK","USA"];
+  return c[Math.floor(Math.random()*c.length)];
+}
+
+function r(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+
+function themeChange(){
+  const t=document.getElementById("theme").value;
+  document.body.style.background =
+    t==="purple"
+    ?"linear-gradient(180deg,#0b0014,#14001f)"
+    :"linear-gradient(180deg,#070707,#0c0c0c)";
 }
 </script>
 
 </body>
 </html>
+
 
 
 
