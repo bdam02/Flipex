@@ -7,11 +7,19 @@
 
 <style>
 *{box-sizing:border-box;font-family:Inter,system-ui,Arial}
+
 body{
   margin:0;
   background:radial-gradient(circle at top,#0f172a,#020617);
   color:white;
-  overflow-x:hidden;
+  overflow-y:auto;
+}
+
+/* SCROLLBAR */
+body::-webkit-scrollbar{width:8px}
+body::-webkit-scrollbar-thumb{
+  background:linear-gradient(#3b82f6,#06b6d4);
+  border-radius:10px;
 }
 
 /* WARNING */
@@ -21,10 +29,10 @@ body{
   right:20px;
   font-size:11px;
   opacity:.6;
-  z-index:5;
+  z-index:10;
 }
 
-/* SETTINGS BTN */
+/* SETTINGS BUTTON */
 .settings-btn{
   position:fixed;
   top:20px;
@@ -40,12 +48,9 @@ body{
   cursor:pointer;
   transition:.3s;
 }
-.settings-btn:hover{
-  transform:scale(1.1) rotate(15deg);
-}
+.settings-btn:hover{transform:scale(1.1) rotate(15deg)}
 .settings-btn svg{
   width:22px;
-  height:22px;
   animation:spin 12s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -60,12 +65,11 @@ body{
   padding:24px;
   transform:translateX(-110%);
   transition:.45s cubic-bezier(.4,0,.2,1);
-  z-index:4;
+  z-index:9;
 }
 .settings.open{transform:translateX(0)}
 .settings label{
   display:flex;
-  align-items:center;
   gap:10px;
   margin:14px 0;
 }
@@ -91,8 +95,8 @@ body{
 .logo{
   font-size:36px;
   font-weight:800;
-  margin-bottom:8px;
 }
+
 input{
   width:100%;
   padding:14px;
@@ -121,10 +125,10 @@ button:hover{
 
 /* AI PANEL */
 .ai{
-  display:none;
   margin-top:20px;
   text-align:left;
   font-size:13px;
+  display:none;
 }
 .progress{
   height:6px;
@@ -137,12 +141,44 @@ button:hover{
   height:100%;
   width:0%;
   background:linear-gradient(90deg,#22d3ee,#3b82f6);
-  transition:width .6s;
+  transition:width 1s;
+}
+
+/* LOADING SKELETON */
+.skeleton{
+  display:none;
+}
+.skel{
+  height:14px;
+  border-radius:6px;
+  background:linear-gradient(90deg,#1e293b,#334155,#1e293b);
+  background-size:200% 100%;
+  animation:shimmer 1.2s infinite;
+  margin:8px 0;
+}
+@keyframes shimmer{
+  to{background-position:-200%}
+}
+
+/* SCROLL ARROW */
+.scroll-hint{
+  text-align:center;
+  margin-bottom:30px;
+  opacity:.6;
+  font-size:12px;
+}
+.scroll-hint span{
+  display:block;
+  font-size:22px;
+  animation:bounce 1.5s infinite;
+}
+@keyframes bounce{
+  50%{transform:translateY(6px)}
 }
 
 /* IP INFOS */
 .section{
-  padding:80px 20px;
+  padding:40px 20px 80px;
   display:flex;
   justify-content:center;
 }
@@ -166,6 +202,7 @@ button:hover{
   border-radius:10px;
   font-size:13px;
 }
+
 footer{
   text-align:center;
   font-size:11px;
@@ -188,34 +225,44 @@ footer{
 
 <div class="settings" id="settings">
 <h2>Settings</h2>
-<label><input type="checkbox" checked> Enable AI visuals</label>
-<label><input type="checkbox" checked> Smooth animations</label>
+<label><input type="checkbox" checked> AI visuals</label>
+<label><input type="checkbox" checked> Animations</label>
 </div>
 
 <div class="hero">
 <div class="card">
 <div class="logo">Flipex</div>
-<input id="user" placeholder="Discord user">
+<input placeholder="Discord user">
 <button onclick="startScan()">Start Scan</button>
 
 <div class="ai" id="ai">
 <div id="aiText">Initializing…</div>
 <div class="progress"><div class="bar" id="bar"></div></div>
 </div>
+
+<div class="skeleton" id="skel">
+<div class="skel"></div>
+<div class="skel"></div>
+<div class="skel"></div>
 </div>
+</div>
+</div>
+
+<div class="scroll-hint">
+<span>⬇</span>
+IP Informations
 </div>
 
 <div class="section">
 <div class="ip-card">
 <h3>IP Infos</h3>
-<input id="ipInput" placeholder="Enter IP address">
+<input placeholder="Enter IP address">
 <button onclick="fakeIP()">Analyze IP</button>
-
 <div class="ip-grid" id="ipData"></div>
 </div>
 </div>
 
-<footer>Flipex © Fake AI Interface</footer>
+<footer>Flipex © Fake Interface</footer>
 
 <script>
 function toggleSettings(){
@@ -223,44 +270,51 @@ function toggleSettings(){
 }
 
 function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
-function randIP(){return `${rand(11,223)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`}
 
 function startScan(){
   const ai=document.getElementById("ai");
+  const skel=document.getElementById("skel");
   const txt=document.getElementById("aiText");
   const bar=document.getElementById("bar");
-  ai.style.display="block";
+
+  skel.style.display="block";
+  ai.style.display="none";
   bar.style.width="0%";
 
-  const steps=[
-    "Initializing neural engine…",
-    "Loading AI model…",
-    "Analyzing patterns…",
-    "Correlating data…",
-    "Finalizing analysis…",
-    `USER IP: ${randIP()}`
-  ];
+  setTimeout(()=>{
+    skel.style.display="none";
+    ai.style.display="block";
 
-  let i=0;
-  function next(){
-    txt.textContent=steps[i];
-    bar.style.width=`${(i+1)*16.6}%`;
-    i++;
-    if(i<steps.length) setTimeout(next,1000);
-  }
-  next();
+    const steps=[
+      "Initializing neural engine…",
+      "Loading AI model…",
+      "Analyzing patterns…",
+      "Correlating data…",
+      "Finalizing analysis…",
+      "USER IP: 142.87.193.44"
+    ];
+
+    let i=0;
+    function next(){
+      txt.textContent=steps[i];
+      bar.style.width=`${(i+1)*16.6}%`;
+      i++;
+      if(i<steps.length) setTimeout(next,1000);
+    }
+    next();
+  },3000);
 }
 
 function fakeIP(){
   const data=document.getElementById("ipData");
   const infos=[
     ["Country","Canada"],
-    ["City","Montreal"],
-    ["ISP","CloudNet Services"],
+    ["City","Toronto"],
+    ["ISP","CloudNet"],
     ["Device","Desktop"],
     ["Latency",rand(20,120)+" ms"],
-    ["Risk Level",["Low","Medium","High"][rand(0,2)]],
-    ["AI Confidence",rand(70,99)+"%"],
+    ["Risk","Medium"],
+    ["AI Confidence",rand(80,99)+"%"],
     ["Routing","Dynamic"]
   ];
   data.innerHTML="";
@@ -272,6 +326,7 @@ function fakeIP(){
 
 </body>
 </html>
+
 
 
 
