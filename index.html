@@ -8,8 +8,11 @@
 <style>
 :root{
   --bg:#020617;
+  --card:#020617e6;
+  --border:rgba(255,255,255,.1);
   --accent:#ef4444;
   --cyan:#22d3ee;
+  --text:#e5e7eb;
 }
 
 *{box-sizing:border-box;font-family:Inter,system-ui}
@@ -17,8 +20,18 @@
 body{
   margin:0;
   background:radial-gradient(circle at top,#020617,#000);
-  color:white;
+  color:var(--text);
   min-height:100vh;
+}
+
+/* WARNING */
+.warning{
+  position:fixed;
+  top:14px;
+  right:18px;
+  font-size:12px;
+  opacity:.65;
+  z-index:1000;
 }
 
 /* MAIN */
@@ -34,7 +47,7 @@ body{
 
 .logo{
   width:90px;height:90px;
-  border-radius:24px;
+  border-radius:22px;
   background:linear-gradient(135deg,#22d3ee,#0ea5e9);
   display:flex;
   align-items:center;
@@ -47,8 +60,8 @@ body{
 
 .card{
   width:100%;
-  background:#020617;
-  border:1px solid rgba(255,255,255,.1);
+  background:var(--card);
+  border:1px solid var(--border);
   border-radius:22px;
   padding:24px;
 }
@@ -73,7 +86,9 @@ button{
   border:none;
   font-weight:700;
   cursor:pointer;
+  transition:.25s;
 }
+button:hover{transform:translateY(-2px)}
 
 .error{
   margin-top:10px;
@@ -95,9 +110,8 @@ button{
   color:var(--cyan);
   font-weight:700;
 }
-
 .ipinfo{
-  margin-top:12px;
+  margin-top:10px;
   font-size:14px;
   opacity:.9;
 }
@@ -114,24 +128,32 @@ button{
 }
 
 .term-title{
-  color:#ef4444;
+  color:var(--accent);
   font-size:22px;
   font-weight:900;
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
 
 .term-body{
   flex:1;
   color:#22d3ee;
-  font-family:ui-monospace,monospace;
+  font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size:14px;
   white-space:pre-wrap;
   overflow-y:auto;
 }
+.cursor{
+  display:inline-block;
+  width:10px;
+  animation:blink 1s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0}}
 </style>
 </head>
 
 <body>
+
+<div class="warning">⚠️ This site is a prank – no real data is accessed</div>
 
 <div class="container">
   <div class="logo">FX</div>
@@ -168,6 +190,10 @@ function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function randIP(){
  return `${rand(1,255)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`
 }
+function time(){
+ const d=new Date();
+ return d.toLocaleTimeString();
+}
 
 async function dots(text){
  loader.textContent=text;
@@ -190,60 +216,63 @@ async function start(){
 
  await dots("searching user");
  await dots("initializing scan");
-
  loader.textContent="";
- openTerminal();
+ await openTerminal();
 }
 
-/* TERMINAL */
+async function typeLine(line){
+ terminal.innerHTML+=line;
+ terminal.scrollTop=terminal.scrollHeight;
+ await sleep(450);
+ terminal.innerHTML+="\n";
+}
+
 async function openTerminal(){
  screen.style.display="flex";
- terminal.textContent="";
+ terminal.innerHTML="";
  const fakeIP=randIP();
 
- const lines=[
-  "[ SYSTEM ] Booting FLIPEX Core",
-  "[ OK ] Memory initialized",
-  "[ OK ] AI modules loaded",
-  "",
-  "TARGET USER: "+userInput.value,
-  "LINKED IP: "+fakeIP,
-  "",
-  "[+] Scanning routing tables",
-  "[+] Analyzing traffic",
-  "[+] Correlating metadata",
-  "",
-  "[✓] Scan complete (simulation)"
+ const logs=[
+  `[${time()}] CORE_BOOT_START`,
+  `[${time()}] MEMORY_OK`,
+  `[${time()}] AI_ENGINE_SYNCED`,
+  ``,
+  `[TARGET] ${userInput.value}`,
+  `[IP] ${fakeIP}`,
+  ``,
+  `[${time()}] ROUTE_ANALYSIS_STARTED`,
+  `[${time()}] PACKET_FLOW_SIMULATION`,
+  `[${time()}] PORT_ENUMERATION_FAKE`,
+  `[${time()}] DATA_CORRELATION`,
+  ``,
+  `[${time()}] STATUS: SIMULATION_COMPLETE`
  ];
 
- for(const line of lines){
-   terminal.textContent+=line+"\n";
-   terminal.scrollTop=terminal.scrollHeight;
-   await sleep(600);
+ for(const l of logs){
+   await typeLine(l);
  }
 
- /* pause + close terminal */
+ terminal.innerHTML+=`<span class="cursor">█</span>`;
  await sleep(1200);
- screen.style.display="none";
 
+ screen.style.display="none";
  showResults(fakeIP);
 }
 
-/* RESULTS */
 function showResults(ip){
  ipBox.textContent="USER IP: "+ip;
-
  infoBox.innerHTML=`
   Country: ${["Canada","France","Germany","Japan"][rand(0,3)]}<br>
-  ISP: ${["FiberCore","CloudNet","Quantum ISP"][rand(0,2)]}<br>
-  Latency: ${rand(10,80)} ms<br>
-  Risk Level: ${rand(15,85)}%
+  ISP: ${["QuantumNet","CloudFiber","NeoISP"][rand(0,2)]}<br>
+  Latency: ${rand(12,85)} ms<br>
+  Risk Level: ${rand(10,90)}%
  `;
 }
 </script>
 
 </body>
 </html>
+
 
 
 
