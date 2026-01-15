@@ -8,47 +8,33 @@
 <style>
 :root{
   --bg:#020617;
-  --card:#020617e6;
-  --border:rgba(255,255,255,.1);
-  --accent:#22d3ee;
-  --text:#e5e7eb;
+  --accent:#ef4444;
+  --cyan:#22d3ee;
 }
 
-*{
-  box-sizing:border-box;
-  font-family:Inter,system-ui;
-}
+*{box-sizing:border-box;font-family:Inter,system-ui}
 
 body{
   margin:0;
   background:radial-gradient(circle at top,#020617,#000);
-  color:var(--text);
+  color:white;
   min-height:100vh;
 }
 
-.warning{
-  position:fixed;
-  top:15px;
-  right:20px;
-  font-size:12px;
-  opacity:.6;
-}
-
+/* MAIN UI */
 .container{
-  max-width:700px;
+  max-width:600px;
   margin:auto;
-  padding:50px 20px;
+  padding:60px 20px;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:32px;
+  gap:30px;
 }
 
-/* LOGO */
 .logo{
-  width:90px;
-  height:90px;
-  border-radius:22px;
+  width:90px;height:90px;
+  border-radius:24px;
   background:linear-gradient(135deg,#22d3ee,#0ea5e9);
   display:flex;
   align-items:center;
@@ -56,38 +42,28 @@ body{
   font-weight:900;
   font-size:28px;
   color:#020617;
-  box-shadow:0 0 40px #22d3ee77;
 }
 
-h1{
-  margin:0;
-  font-size:44px;
-  letter-spacing:1px;
-}
-
-/* CARD */
 .card{
   width:100%;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:22px;
+  background:#020617;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;
   padding:24px;
 }
 
-/* INPUT + BUTTON */
-.input,
-button{
+input,button{
   width:100%;
   height:52px;
   border-radius:14px;
   font-size:15px;
 }
 
-.input{
-  padding:0 14px;
+input{
   background:#020617;
-  border:1px solid var(--border);
+  border:1px solid rgba(255,255,255,.2);
   color:white;
+  padding:0 14px;
 }
 
 button{
@@ -96,141 +72,82 @@ button{
   border:none;
   font-weight:700;
   cursor:pointer;
-  transition:.25s;
 }
 
-button:hover{
-  transform:translateY(-2px);
+.error{
+  margin-top:10px;
+  color:#ef4444;
+  font-size:14px;
+  display:none;
 }
 
-/* LOADER */
 .loader{
   margin-top:16px;
-  font-size:14px;
   min-height:22px;
   opacity:.8;
 }
 
-.progress{
-  width:100%;
-  height:6px;
-  background:#020617;
-  border-radius:6px;
-  overflow:hidden;
-  margin-top:10px;
+/* FULLSCREEN TERMINAL */
+.terminal-screen{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:none;
+  flex-direction:column;
+  padding:20px;
+  z-index:999;
 }
 
-.progress div{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#22d3ee,#0ea5e9);
+.term-title{
+  color:#ef4444;
+  font-size:22px;
+  font-weight:900;
+  margin-bottom:10px;
 }
 
-.fake-ip{
-  margin-top:18px;
-  font-size:20px;
-  color:var(--accent);
-  font-weight:600;
-}
-
-/* TERMINAL */
-.terminal{
-  width:100%;
-  background:#020617;
-  border:1px solid var(--border);
-  border-radius:18px;
-  overflow:hidden;
-  margin-top:20px;
-}
-
-.term-header{
-  display:flex;
-  gap:6px;
-  padding:10px;
-  border-bottom:1px solid var(--border);
-}
-
-.dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-}
-.red{background:#ef4444}
-.yellow{background:#facc15}
-.green{background:#22c55e}
-
-pre{
-  margin:0;
-  padding:18px;
-  font-size:13px;
+.term-body{
+  flex:1;
   color:#22d3ee;
-  min-height:180px;
+  font-family:ui-monospace,monospace;
+  font-size:14px;
   white-space:pre-wrap;
+  overflow-y:auto;
 }
-
-/* IP INFOS */
-.section-title{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.arrow{
-  font-size:20px;
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="warning">⚠️ This site is a prank</div>
-
 <div class="container">
+  <div class="logo">FX</div>
+  <h1>Flipex</h1>
 
-<div class="logo">FX</div>
-<h1>Flipex</h1>
-
-<div class="card">
-  <input class="input" id="user" placeholder="Discord user">
-  <button onclick="start()">Search</button>
-
-  <div class="loader" id="loader"></div>
-  <div class="progress"><div id="bar"></div></div>
-  <div class="fake-ip" id="ip"></div>
-
-  <!-- FAKE TERMINAL -->
-  <div class="terminal">
-    <div class="term-header">
-      <span class="dot red"></span>
-      <span class="dot yellow"></span>
-      <span class="dot green"></span>
-    </div>
-    <pre id="terminal"></pre>
+  <div class="card">
+    <input id="user" placeholder="Discord user">
+    <button onclick="start()">Search</button>
+    <div class="error" id="error">This field must be filled</div>
+    <div class="loader" id="loader"></div>
   </div>
 </div>
 
-<div class="card">
-  <div class="section-title">
-    <span class="arrow">⬇</span>
-    <h3>IP Informations</h3>
-  </div>
-  <div id="ipinfo">Waiting for scan…</div>
-</div>
-
+<!-- TERMINAL FULLSCREEN -->
+<div class="terminal-screen" id="terminalScreen">
+  <div class="term-title">FLIPEX :: SECURE TERMINAL</div>
+  <div class="term-body" id="terminal"></div>
 </div>
 
 <script>
+const userInput=document.getElementById("user");
+const error=document.getElementById("error");
 const loader=document.getElementById("loader");
-const bar=document.getElementById("bar");
-const ip=document.getElementById("ip");
+const screen=document.getElementById("terminalScreen");
 const terminal=document.getElementById("terminal");
 
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
 function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function randIP(){
- return `${rand(1,255)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`;
+ return `${rand(1,255)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`
 }
-function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
 
 async function dots(text){
  loader.textContent=text;
@@ -241,49 +158,57 @@ async function dots(text){
 }
 
 async function start(){
- ip.textContent="";
- terminal.textContent="";
- bar.style.width="0%";
+ error.style.display="none";
+ loader.textContent="";
 
- await dots("searching user");
- await dots("searching for ip");
- await dots("analyzing network");
-
- for(let i=0;i<=100;i++){
-  bar.style.width=i+"%";
-  await sleep(40);
+ if(userInput.value.trim()===""){
+   error.style.display="block";
+   return;
  }
 
- const fakeIP=randIP();
- ip.textContent="USER IP: "+fakeIP;
+ await dots("searching user");
+ await dots("initializing scan");
 
- document.getElementById("ipinfo").innerHTML=
- `<p>Country: ${["Canada","France","Japan","Germany"][rand(0,3)]}</p>
-  <p>ISP: ${["QuantumNet","FiberCore","CloudISP"][rand(0,2)]}</p>
-  <p>Risk Level: ${rand(12,88)}%</p>`;
-
- startTerminal(fakeIP);
+ loader.textContent="";
+ openTerminal();
 }
 
-/* TERMINAL ANIMATION */
-function startTerminal(ip){
+function openTerminal(){
+ screen.style.display="flex";
+ terminal.textContent="";
+ const ip=randIP();
+
  const lines=[
-  "> Initializing Flipex Terminal...",
-  "> Loading exploit modules...",
-  "> Scanning packets...",
-  `> Target IP locked: ${ip}`,
-  "> Mapping network routes...",
-  "> Scan completed (simulated)"
+  "[ SYSTEM ] Booting FLIPEX OSINT CORE",
+  "[ OK ] Memory modules loaded",
+  "[ OK ] Neural engine synced",
+  "",
+  "TARGET USER: "+userInput.value,
+  "ASSIGNED IP: "+ip,
+  "",
+  "[+] Mapping network topology",
+  "[+] Enumerating nodes",
+  "[+] Analyzing traffic patterns",
+  "",
+  "[!] WARNING: simulation mode enabled",
+  "[✓] Analysis completed successfully"
  ];
+
  let l=0,c=0;
+
  function type(){
   if(l>=lines.length) return;
-  terminal.textContent+=lines[l][c++]||"";
+  terminal.textContent+=lines[l][c]||"";
+  c++;
+  terminal.scrollTop=terminal.scrollHeight;
+
   if(c===lines[l].length){
     terminal.textContent+="\n";
     l++;c=0;
     setTimeout(type,500);
-  } else setTimeout(type,35);
+  }else{
+    setTimeout(type,30);
+  }
  }
  type();
 }
@@ -291,6 +216,7 @@ function startTerminal(ip){
 
 </body>
 </html>
+
 
 
 
