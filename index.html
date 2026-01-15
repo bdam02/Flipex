@@ -2,255 +2,177 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flipex</title>
 
 <style>
-*{box-sizing:border-box}
-
-:root{
-  --accent1:#4c6cff;
-  --accent2:#00ffd5;
+*{
+  box-sizing:border-box;
+  font-family:Inter,system-ui,Segoe UI,Arial;
 }
 
 body{
   margin:0;
   min-height:100vh;
-  background:linear-gradient(180deg,#070707,#0c0c0c);
-  font-family:Inter,Arial,sans-serif;
+  background:radial-gradient(circle at top,#0f172a,#020617);
   color:white;
   display:flex;
-  justify-content:center;
   align-items:center;
-  padding:20px;
+  justify-content:center;
+  overflow-x:hidden;
 }
 
-/* WARNING */
-.warning{
-  position:fixed;
-  top:16px;
-  right:22px;
-  font-size:12px;
-  padding:6px 12px;
-  border-radius:20px;
-  background:rgba(255,80,80,.15);
-  border:1px solid rgba(255,80,80,.35);
-  color:#ffb3b3;
-  backdrop-filter:blur(6px);
-}
-
-/* SETTINGS BUTTON */
+/* ---------- SETTINGS BUTTON ---------- */
 .settings-btn{
   position:fixed;
-  top:22px;
-  left:22px;
-  width:42px;
-  height:42px;
+  top:20px;
+  left:20px;
+  width:44px;
+  height:44px;
   border-radius:50%;
-  cursor:pointer;
   background:rgba(255,255,255,.08);
   border:1px solid rgba(255,255,255,.2);
   display:flex;
   align-items:center;
   justify-content:center;
-  transition:.35s cubic-bezier(.4,0,.2,1);
+  cursor:pointer;
+  transition:.3s;
+  box-shadow:0 0 20px rgba(96,165,250,.15);
 }
 
 .settings-btn:hover{
-  background:rgba(255,255,255,.14);
-  box-shadow:0 0 25px rgba(0,255,220,.25);
+  transform:scale(1.1) rotate(15deg);
+  box-shadow:0 0 30px rgba(96,165,250,.4);
 }
 
+/* SVG animation */
 .settings-btn svg{
-  width:20px;
-  height:20px;
-  fill:white;
-  transition:.6s cubic-bezier(.4,0,.2,1);
+  width:22px;
+  height:22px;
+  animation:spin 12s linear infinite;
 }
 
-.settings-btn:hover svg{
-  transform:rotate(90deg);
+@keyframes spin{
+  from{transform:rotate(0)}
+  to{transform:rotate(360deg)}
 }
 
-/* SETTINGS PANEL */
+/* ---------- SETTINGS PANEL ---------- */
 .settings{
   position:fixed;
-  top:78px;
-  left:22px;
-  width:230px;
-  padding:16px;
-  background:rgba(15,15,15,.9);
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:16px;
-  backdrop-filter:blur(14px);
-
-  transform:translateY(-10px) scale(.95);
-  opacity:0;
-  pointer-events:none;
-  transition:.35s cubic-bezier(.4,0,.2,1);
+  top:0;
+  left:0;
+  height:100%;
+  width:300px;
+  background:rgba(15,23,42,.95);
+  backdrop-filter:blur(12px);
+  padding:24px;
+  transform:translateX(-110%);
+  transition:.45s cubic-bezier(.4,0,.2,1);
+  z-index:10;
 }
 
 .settings.open{
-  transform:translateY(0) scale(1);
-  opacity:1;
-  pointer-events:auto;
+  transform:translateX(0);
+}
+
+.settings h2{
+  margin-top:0;
 }
 
 .settings label{
-  font-size:13px;
-  color:#ccc;
-}
-
-.settings select{
-  width:100%;
-  margin-top:6px;
-  margin-bottom:14px;
-  padding:8px;
-  border-radius:8px;
-  border:none;
-  background:#1e1e1e;
-  color:white;
-  cursor:pointer;
-}
-
-.settings .check{
   display:flex;
   align-items:center;
-  gap:8px;
-  margin-bottom:14px;
+  gap:10px;
+  margin:14px 0;
 }
 
-/* MAIN */
-.container{
+/* ---------- MAIN CARD ---------- */
+.card{
+  width:92%;
+  max-width:420px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  padding:30px;
   text-align:center;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  animation:fade 1s ease;
+  box-shadow:0 0 40px rgba(0,0,0,.6);
+  animation:fadeUp .8s ease;
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:none}
 }
 
 .logo{
-  width:82px;
-  height:82px;
-  border-radius:24px;
-  background:linear-gradient(135deg,var(--accent2),var(--accent1));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-  font-size:32px;
-  color:#050505;
-  box-shadow:0 0 50px rgba(0,255,220,.4);
-  transition:.4s cubic-bezier(.4,0,.2,1);
-}
-
-.logo:hover{
-  transform:scale(1.08);
-}
-
-h1{
-  margin:18px 0 28px;
-  font-size:44px;
-}
-
-/* CARD */
-.card{
-  background:#fdfdfd;
-  color:#000;
-  width:460px;
-  padding:26px;
-  border-radius:20px;
-  box-shadow:0 30px 100px rgba(0,0,0,.6);
-}
-
-label{
-  display:block;
-  text-align:left;
-  font-weight:600;
-  margin-bottom:6px;
+  font-size:34px;
+  font-weight:800;
+  letter-spacing:1px;
 }
 
 input{
   width:100%;
-  padding:12px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  font-size:15px;
-}
-
-/* BUTTONS */
-.buttons{
-  display:flex;
-  gap:12px;
-  margin-top:16px;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  margin-top:20px;
+  background:#020617;
+  color:white;
+  outline:none;
 }
 
 button{
-  flex:1;
-  padding:12px;
+  margin-top:18px;
+  width:100%;
+  padding:14px;
+  border-radius:12px;
   border:none;
-  border-radius:10px;
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+  color:white;
   font-weight:600;
   cursor:pointer;
-  background:linear-gradient(135deg,var(--accent1),var(--accent2));
-  transition:.25s cubic-bezier(.4,0,.2,1);
+  transition:.3s;
 }
 
 button:hover{
-  transform:translateY(-3px);
-  box-shadow:0 12px 35px rgba(0,255,220,.35);
+  transform:translateY(-2px);
+  box-shadow:0 10px 25px rgba(59,130,246,.4);
 }
 
-button:active{
-  transform:translateY(0) scale(.97);
-}
-
-.secondary{
-  background:#e6e6e6;
-}
-
-.status{
-  margin-top:14px;
+/* ---------- AI PANEL ---------- */
+.ai-panel{
+  margin-top:22px;
+  background:rgba(255,255,255,.04);
+  border-radius:12px;
+  padding:14px;
+  text-align:left;
   font-size:13px;
-  color:#444;
-}
-
-/* PROGRESS */
-.progress{
-  margin-top:18px;
-  width:100%;
-  height:8px;
-  background:#ddd;
-  border-radius:10px;
-  overflow:hidden;
   display:none;
 }
 
-.progress-bar{
+.progress{
+  height:6px;
+  background:#020617;
+  border-radius:6px;
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.bar{
   height:100%;
   width:0%;
-  background:linear-gradient(90deg,var(--accent1),var(--accent2));
-  transition:width .4s ease;
+  background:linear-gradient(90deg,#22d3ee,#3b82f6);
+  transition:width .4s;
 }
 
-/* OUTPUT */
-.output{
-  margin-top:18px;
-  font-family:ui-monospace,monospace;
-  font-size:14px;
-  text-align:left;
-}
-
-/* MOBILE */
-@media(max-width:520px){
-  h1{font-size:36px}
-  .card{width:100%}
-  .buttons{flex-direction:column}
-}
-
-/* ANIM */
-@keyframes fade{
-  from{opacity:0}
-  to{opacity:1}
+/* ---------- WARNING ---------- */
+.warning{
+  position:fixed;
+  top:18px;
+  right:20px;
+  font-size:11px;
+  opacity:.6;
 }
 </style>
 </head>
@@ -259,115 +181,69 @@ button:active{
 
 <div class="warning">⚠️ This site is a prank</div>
 
-<button class="settings-btn" onclick="toggleSettings()">
-  <svg viewBox="0 0 24 24">
-    <path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8Zm9.4 3.4c0-.5-.1-1-.1-1.4l2-1.6-2-3.4-2.4 1a7.9 7.9 0 0 0-2.5-1.4l-.4-2.6H10l-.4 2.6a7.9 7.9 0 0 0-2.5 1.4l-2.4-1-2 3.4 2 1.6c0 .5-.1 1-.1 1.4s.1 1 .1 1.4l-2 1.6 2 3.4 2.4-1a7.9 7.9 0 0 0 2.5 1.4l.4 2.6h4l.4-2.6a7.9 7.9 0 0 0 2.5-1.4l2.4 1 2-3.4-2-1.6c0-.5.1-1 .1-1.4Z"/>
-  </svg>
-</button>
-
-<div class="settings" id="settings">
-  <label>Animation speed</label>
-  <select id="speed">
-    <option value="600">Normal</option>
-    <option value="400">Fast</option>
-  </select>
-
-  <div class="check">
-    <input type="checkbox" id="location">
-    <label for="location">Show location</label>
-  </div>
+<div class="settings-btn" onclick="toggleSettings()">
+<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+<circle cx="12" cy="12" r="3"/>
+<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+</svg>
 </div>
 
-<div class="container">
-  <div class="logo">FX</div>
-  <h1>Flipex</h1>
+<div class="settings" id="settings">
+<h2>Settings</h2>
+<label><input type="checkbox" checked> Enable AI Analysis</label>
+<label><input type="checkbox" checked> Smooth animations</label>
+</div>
 
-  <div class="card">
-    <label>Discord user</label>
-    <input id="user" placeholder="username#0000">
+<div class="card">
+<div class="logo">Flipex</div>
+<input id="user" placeholder="Discord user">
+<button onclick="startScan()">Start Scan</button>
 
-    <div class="buttons">
-      <button onclick="start()">Start scan</button>
-      <button class="secondary" onclick="clearOut()">Clear</button>
-    </div>
-
-    <div class="status">
-      API: Online • Database: Connected • Network: Stable
-    </div>
-
-    <div class="progress" id="progress">
-      <div class="progress-bar" id="bar"></div>
-    </div>
-
-    <div class="output" id="out"></div>
-  </div>
+<div class="ai-panel" id="ai">
+<div id="aiText">Initializing AI engine…</div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+</div>
 </div>
 
 <script>
-const out=document.getElementById("out");
-const bar=document.getElementById("bar");
-const progress=document.getElementById("progress");
-
 function toggleSettings(){
   document.getElementById("settings").classList.toggle("open");
 }
 
-async function start(){
-  out.innerHTML="";
+function randIP(){
+  return `${rand(10,255)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`;
+}
+function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+
+function startScan(){
+  const ai=document.getElementById("ai");
+  const txt=document.getElementById("aiText");
+  const bar=document.getElementById("bar");
+  ai.style.display="block";
   bar.style.width="0%";
-  progress.style.display="block";
 
-  await step("Initializing scan",20);
-  await step("Searching user",45);
-  await step("Locating network node",70);
-  await step("Fetching IP data",100);
+  const steps=[
+    "Initializing neural engine…",
+    "Loading AI model v4.2…",
+    "Analyzing user patterns…",
+    "Correlating network data…",
+    `USER IP: ${randIP()}`
+  ];
 
-  out.innerHTML+=`<div><strong>USER IP:</strong> ${fakeIP()}</div>`;
-  if(document.getElementById("location").checked){
-    out.innerHTML+=`<div><strong>Location:</strong> ${fakeCountry()}</div>`;
+  let i=0;
+  function next(){
+    txt.textContent=steps[i];
+    bar.style.width=`${(i+1)*20}%`;
+    i++;
+    if(i<steps.length) setTimeout(next,600);
   }
-}
-
-function clearOut(){
-  out.innerHTML="";
-  bar.style.width="0%";
-  progress.style.display="none";
-}
-
-function step(text,percent){
-  return new Promise(res=>{
-    let dots=0;
-    const speed=parseInt(document.getElementById("speed").value);
-    const line=document.createElement("div");
-    out.appendChild(line);
-    const i=setInterval(()=>{
-      dots++;
-      line.textContent=text+".".repeat(dots);
-      bar.style.width=percent+"%";
-      if(dots===3){
-        clearInterval(i);
-        setTimeout(res,600);
-      }
-    },speed);
-  });
-}
-
-function fakeIP(){
-  return `${r(1,223)}.${r(0,255)}.${r(0,255)}.${r(1,254)}`;
-}
-
-function fakeCountry(){
-  const c=["Canada","France","Germany","Japan","Brazil","UK","USA"];
-  return c[Math.floor(Math.random()*c.length)];
-}
-
-function r(min,max){
-  return Math.floor(Math.random()*(max-min+1))+min;
+  next();
 }
 </script>
 
 </body>
 </html>
+
 
 
 
