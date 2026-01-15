@@ -6,326 +6,294 @@
 <title>Flipex</title>
 
 <style>
-*{box-sizing:border-box;font-family:Inter,system-ui,Arial}
+:root{
+  --bg:#020617;
+  --card:#020617cc;
+  --border:rgba(255,255,255,.1);
+  --accent:#22d3ee;
+  --text:#e5e7eb;
+}
+
+*{box-sizing:border-box;font-family:Inter,system-ui}
 
 body{
   margin:0;
-  background:radial-gradient(circle at top,#0f172a,#020617);
-  color:white;
-  overflow-y:auto;
+  background:radial-gradient(circle at top,#020617,#000);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
 }
 
-/* SCROLLBAR */
-body::-webkit-scrollbar{width:8px}
-body::-webkit-scrollbar-thumb{
-  background:linear-gradient(#3b82f6,#06b6d4);
-  border-radius:10px;
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:40px 20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:40px;
 }
 
-/* WARNING */
 .warning{
   position:fixed;
-  top:16px;
+  top:15px;
   right:20px;
-  font-size:11px;
+  font-size:12px;
   opacity:.6;
-  z-index:10;
 }
 
-/* SETTINGS BUTTON */
-.settings-btn{
-  position:fixed;
-  top:20px;
-  left:20px;
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.2);
+.logo{
+  width:80px;
+  height:80px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#22d3ee,#0ea5e9);
   display:flex;
   align-items:center;
   justify-content:center;
-  cursor:pointer;
-  transition:.3s;
-}
-.settings-btn:hover{transform:scale(1.1) rotate(15deg)}
-.settings-btn svg{
-  width:22px;
-  animation:spin 12s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* SETTINGS PANEL */
-.settings{
-  position:fixed;
-  inset:0 auto 0 0;
-  width:300px;
-  background:rgba(15,23,42,.95);
-  backdrop-filter:blur(12px);
-  padding:24px;
-  transform:translateX(-110%);
-  transition:.45s cubic-bezier(.4,0,.2,1);
-  z-index:9;
-}
-.settings.open{transform:translateX(0)}
-.settings label{
-  display:flex;
-  gap:10px;
-  margin:14px 0;
+  font-weight:900;
+  color:#020617;
+  font-size:26px;
+  box-shadow:0 0 40px #22d3ee66;
 }
 
-/* HERO */
-.hero{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:30px;
+h1{
+  margin:0;
+  font-size:42px;
+  letter-spacing:1px;
 }
+
 .card{
   width:100%;
-  max-width:420px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:18px;
-  padding:30px;
-  text-align:center;
-  box-shadow:0 0 40px rgba(0,0,0,.6);
-}
-.logo{
-  font-size:36px;
-  font-weight:800;
+  max-width:600px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:24px;
+  box-shadow:0 0 60px rgba(0,0,0,.6);
 }
 
-input{
+.input{
   width:100%;
   padding:14px;
   border-radius:12px;
-  border:none;
   background:#020617;
+  border:1px solid var(--border);
   color:white;
-  margin-top:16px;
+  font-size:15px;
 }
+
 button{
-  margin-top:16px;
+  margin-top:15px;
   width:100%;
   padding:14px;
   border-radius:12px;
+  background:linear-gradient(135deg,#22d3ee,#0ea5e9);
   border:none;
-  background:linear-gradient(135deg,#3b82f6,#06b6d4);
-  color:white;
-  font-weight:600;
+  font-weight:700;
   cursor:pointer;
   transition:.3s;
 }
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 25px rgba(59,130,246,.4);
+
+button:hover{transform:translateY(-2px)}
+
+.loader{
+  margin-top:20px;
+  font-size:14px;
+  opacity:.8;
+  min-height:40px;
 }
 
-/* AI PANEL */
-.ai{
-  margin-top:20px;
-  text-align:left;
-  font-size:13px;
-  display:none;
-}
 .progress{
+  width:100%;
   height:6px;
   background:#020617;
   border-radius:6px;
   overflow:hidden;
   margin-top:10px;
 }
-.bar{
+
+.progress div{
   height:100%;
   width:0%;
-  background:linear-gradient(90deg,#22d3ee,#3b82f6);
-  transition:width 1s;
+  background:linear-gradient(90deg,#22d3ee,#0ea5e9);
 }
 
-/* LOADING SKELETON */
-.skeleton{
-  display:none;
-}
-.skel{
-  height:14px;
-  border-radius:6px;
-  background:linear-gradient(90deg,#1e293b,#334155,#1e293b);
-  background-size:200% 100%;
-  animation:shimmer 1.2s infinite;
-  margin:8px 0;
-}
-@keyframes shimmer{
-  to{background-position:-200%}
-}
-
-/* SCROLL ARROW */
-.scroll-hint{
-  text-align:center;
-  margin-bottom:30px;
-  opacity:.6;
-  font-size:12px;
-}
-.scroll-hint span{
-  display:block;
-  font-size:22px;
-  animation:bounce 1.5s infinite;
-}
-@keyframes bounce{
-  50%{transform:translateY(6px)}
+.fake-ip{
+  margin-top:20px;
+  font-size:20px;
+  color:var(--accent);
 }
 
 /* IP INFOS */
-.section{
-  padding:40px 20px 80px;
+.section-title{
   display:flex;
-  justify-content:center;
-}
-.ip-card{
-  width:100%;
-  max-width:520px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:18px;
-  padding:26px;
-}
-.ip-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-  margin-top:16px;
-}
-.ip-box{
-  background:#020617;
-  padding:12px;
-  border-radius:10px;
-  font-size:13px;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
 }
 
-footer{
-  text-align:center;
-  font-size:11px;
-  opacity:.5;
-  padding:20px;
+.arrow{
+  font-size:20px;
+}
+
+.skeleton{
+  background:linear-gradient(90deg,#020617,#0f172a,#020617);
+  height:14px;
+  border-radius:6px;
+  animation:load 1.4s infinite;
+}
+
+@keyframes load{
+  0%{background-position:0%}
+  100%{background-position:100%}
+}
+
+/* TERMINAL */
+.terminal{
+  background:#020617;
+  border-radius:16px;
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+
+.term-header{
+  display:flex;
+  gap:6px;
+  padding:10px;
+  border-bottom:1px solid var(--border);
+}
+
+.dot{width:10px;height:10px;border-radius:50%}
+.red{background:#ef4444}
+.yellow{background:#facc15}
+.green{background:#22c55e}
+
+pre{
+  padding:18px;
+  margin:0;
+  color:#22d3ee;
+  font-size:13px;
+  min-height:180px;
+  white-space:pre-wrap;
 }
 </style>
 </head>
 
 <body>
 
-<div class="warning">⚠️ This site is a prank / fake analysis</div>
+<div class="warning">⚠️ This site is a prank</div>
 
-<div class="settings-btn" onclick="toggleSettings()">
-<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-<circle cx="12" cy="12" r="3"/>
-<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-</svg>
-</div>
+<div class="container">
 
-<div class="settings" id="settings">
-<h2>Settings</h2>
-<label><input type="checkbox" checked> AI visuals</label>
-<label><input type="checkbox" checked> Animations</label>
-</div>
+<div class="logo">FX</div>
+<h1>Flipex</h1>
 
-<div class="hero">
 <div class="card">
-<div class="logo">Flipex</div>
-<input placeholder="Discord user">
-<button onclick="startScan()">Start Scan</button>
+<input class="input" id="user" placeholder="Discord user">
+<button onclick="start()">Search</button>
 
-<div class="ai" id="ai">
-<div id="aiText">Initializing…</div>
-<div class="progress"><div class="bar" id="bar"></div></div>
-</div>
-
-<div class="skeleton" id="skel">
-<div class="skel"></div>
-<div class="skel"></div>
-<div class="skel"></div>
-</div>
-</div>
+<div class="loader" id="loader"></div>
+<div class="progress"><div id="bar"></div></div>
+<div class="fake-ip" id="ip"></div>
 </div>
 
-<div class="scroll-hint">
-<span>⬇</span>
-IP Informations
+<div class="card">
+<div class="section-title">
+<span class="arrow">⬇</span>
+<h3>IP Informations</h3>
 </div>
-
-<div class="section">
-<div class="ip-card">
-<h3>IP Infos</h3>
-<input placeholder="Enter IP address">
-<button onclick="fakeIP()">Analyze IP</button>
-<div class="ip-grid" id="ipData"></div>
+<div id="ipinfo">
+<div class="skeleton"></div><br>
+<div class="skeleton" style="width:70%"></div><br>
+<div class="skeleton" style="width:50%"></div>
 </div>
 </div>
 
-<footer>Flipex © Fake Interface</footer>
+<div class="card terminal">
+<div class="term-header">
+<span class="dot red"></span>
+<span class="dot yellow"></span>
+<span class="dot green"></span>
+</div>
+<pre id="terminal"></pre>
+</div>
+
+</div>
 
 <script>
-function toggleSettings(){
-  document.getElementById("settings").classList.toggle("open");
+const loader=document.getElementById("loader");
+const bar=document.getElementById("bar");
+const ip=document.getElementById("ip");
+
+function randIP(){
+ return `${rand(1,255)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`;
+}
+function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+
+async function start(){
+ ip.textContent="";
+ bar.style.width="0%";
+ loader.textContent="searching user";
+ await dots();
+ loader.textContent="searching for ip";
+ await dots();
+ loader.textContent="analyzing network";
+ for(let i=0;i<=100;i++){
+   bar.style.width=i+"%";
+   await sleep(60);
+ }
+ ip.textContent="USER IP: "+randIP();
+ fakeInfos();
+ startTerminal();
 }
 
-function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
-
-function startScan(){
-  const ai=document.getElementById("ai");
-  const skel=document.getElementById("skel");
-  const txt=document.getElementById("aiText");
-  const bar=document.getElementById("bar");
-
-  skel.style.display="block";
-  ai.style.display="none";
-  bar.style.width="0%";
-
-  setTimeout(()=>{
-    skel.style.display="none";
-    ai.style.display="block";
-
-    const steps=[
-      "Initializing neural engine…",
-      "Loading AI model…",
-      "Analyzing patterns…",
-      "Correlating data…",
-      "Finalizing analysis…",
-      "USER IP: 142.87.193.44"
-    ];
-
-    let i=0;
-    function next(){
-      txt.textContent=steps[i];
-      bar.style.width=`${(i+1)*16.6}%`;
-      i++;
-      if(i<steps.length) setTimeout(next,1000);
-    }
-    next();
-  },3000);
+async function dots(){
+ for(let i=0;i<3;i++){
+  loader.textContent+=".";
+  await sleep(600);
+ }
 }
 
-function fakeIP(){
-  const data=document.getElementById("ipData");
-  const infos=[
-    ["Country","Canada"],
-    ["City","Toronto"],
-    ["ISP","CloudNet"],
-    ["Device","Desktop"],
-    ["Latency",rand(20,120)+" ms"],
-    ["Risk","Medium"],
-    ["AI Confidence",rand(80,99)+"%"],
-    ["Routing","Dynamic"]
-  ];
-  data.innerHTML="";
-  infos.forEach(i=>{
-    data.innerHTML+=`<div class="ip-box"><b>${i[0]}</b><br>${i[1]}</div>`;
-  });
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+
+function fakeInfos(){
+ document.getElementById("ipinfo").innerHTML=
+ `<p>Country: ${["Canada","France","Germany","Japan"][rand(0,3)]}</p>
+  <p>ISP: ${["CloudNet","FiberOne","Quantum ISP"][rand(0,2)]}</p>
+  <p>Risk Score: ${rand(10,90)}%</p>`;
+}
+
+/* TERMINAL */
+const lines=[
+"> Initializing Flipex AI Terminal...",
+"> Loading secure modules...",
+"> Establishing encrypted session...",
+"> Simulated scan running...",
+"> No real data accessed",
+"> Analysis completed"
+];
+
+let l=0,c=0;
+function startTerminal(){
+ const t=document.getElementById("terminal");
+ t.textContent="";
+ l=0;c=0;
+ type();
+ function type(){
+  if(l>=lines.length)return;
+  t.textContent+=lines[l][c++]||"";
+  if(c===lines[l].length){
+    t.textContent+="\n";
+    l++;c=0;
+    setTimeout(type,400);
+  }else setTimeout(type,35);
+ }
 }
 </script>
 
 </body>
 </html>
+
 
 
 
