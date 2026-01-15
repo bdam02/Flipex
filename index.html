@@ -7,6 +7,11 @@
 <style>
 *{box-sizing:border-box}
 
+:root{
+  --accent1:#4c6cff;
+  --accent2:#00ffd5;
+}
+
 body{
   margin:0;
   min-height:100vh;
@@ -30,32 +35,64 @@ body{
   background:rgba(255,80,80,.15);
   border:1px solid rgba(255,80,80,.35);
   color:#ffb3b3;
+  backdrop-filter:blur(6px);
 }
 
-/* SETTINGS */
+/* SETTINGS BUTTON */
 .settings-btn{
   position:fixed;
   top:22px;
   left:22px;
-  width:38px;
-  height:38px;
+  width:42px;
+  height:42px;
   border-radius:50%;
   cursor:pointer;
   background:rgba(255,255,255,.08);
   border:1px solid rgba(255,255,255,.2);
-  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.35s cubic-bezier(.4,0,.2,1);
 }
 
+.settings-btn:hover{
+  background:rgba(255,255,255,.14);
+  box-shadow:0 0 25px rgba(0,255,220,.25);
+}
+
+.settings-btn svg{
+  width:20px;
+  height:20px;
+  fill:white;
+  transition:.6s cubic-bezier(.4,0,.2,1);
+}
+
+.settings-btn:hover svg{
+  transform:rotate(90deg);
+}
+
+/* SETTINGS PANEL */
 .settings{
   position:fixed;
-  top:70px;
+  top:78px;
   left:22px;
-  background:#111;
-  border:1px solid #222;
-  padding:14px;
-  border-radius:14px;
-  width:220px;
-  display:none;
+  width:230px;
+  padding:16px;
+  background:rgba(15,15,15,.9);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:16px;
+  backdrop-filter:blur(14px);
+
+  transform:translateY(-10px) scale(.95);
+  opacity:0;
+  pointer-events:none;
+  transition:.35s cubic-bezier(.4,0,.2,1);
+}
+
+.settings.open{
+  transform:translateY(0) scale(1);
+  opacity:1;
+  pointer-events:auto;
 }
 
 .settings label{
@@ -63,14 +100,23 @@ body{
   color:#ccc;
 }
 
-.settings select,
-.settings input{
+.settings select{
   width:100%;
   margin-top:6px;
-  margin-bottom:12px;
-  padding:6px;
-  border-radius:6px;
+  margin-bottom:14px;
+  padding:8px;
+  border-radius:8px;
   border:none;
+  background:#1e1e1e;
+  color:white;
+  cursor:pointer;
+}
+
+.settings .check{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:14px;
 }
 
 /* MAIN */
@@ -83,26 +129,26 @@ body{
 }
 
 .logo{
-  width:80px;
-  height:80px;
+  width:82px;
+  height:82px;
   border-radius:24px;
-  background:linear-gradient(135deg,#00ffd5,#4c6cff);
+  background:linear-gradient(135deg,var(--accent2),var(--accent1));
   display:flex;
   align-items:center;
   justify-content:center;
   font-weight:900;
   font-size:32px;
   color:#050505;
-  box-shadow:0 0 45px rgba(0,255,220,.4);
-  transition:.3s;
+  box-shadow:0 0 50px rgba(0,255,220,.4);
+  transition:.4s cubic-bezier(.4,0,.2,1);
 }
 
 .logo:hover{
-  transform:scale(1.05);
+  transform:scale(1.08);
 }
 
 h1{
-  margin:16px 0 26px;
+  margin:18px 0 28px;
   font-size:44px;
 }
 
@@ -112,8 +158,8 @@ h1{
   color:#000;
   width:460px;
   padding:26px;
-  border-radius:18px;
-  box-shadow:0 30px 90px rgba(0,0,0,.5);
+  border-radius:20px;
+  box-shadow:0 30px 100px rgba(0,0,0,.6);
 }
 
 label{
@@ -134,24 +180,28 @@ input{
 /* BUTTONS */
 .buttons{
   display:flex;
-  gap:10px;
-  margin-top:14px;
+  gap:12px;
+  margin-top:16px;
 }
 
 button{
   flex:1;
   padding:12px;
   border:none;
-  border-radius:8px;
+  border-radius:10px;
   font-weight:600;
   cursor:pointer;
-  background:linear-gradient(135deg,#4c6cff,#00ffd5);
-  transition:.3s;
+  background:linear-gradient(135deg,var(--accent1),var(--accent2));
+  transition:.25s cubic-bezier(.4,0,.2,1);
 }
 
 button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 30px rgba(0,255,220,.35);
+  transform:translateY(-3px);
+  box-shadow:0 12px 35px rgba(0,255,220,.35);
+}
+
+button:active{
+  transform:translateY(0) scale(.97);
 }
 
 .secondary{
@@ -164,9 +214,9 @@ button:hover{
   color:#444;
 }
 
-/* PROGRESS BAR */
+/* PROGRESS */
 .progress{
-  margin-top:16px;
+  margin-top:18px;
   width:100%;
   height:8px;
   background:#ddd;
@@ -178,8 +228,8 @@ button:hover{
 .progress-bar{
   height:100%;
   width:0%;
-  background:linear-gradient(90deg,#4c6cff,#00ffd5);
-  transition:width .3s;
+  background:linear-gradient(90deg,var(--accent1),var(--accent2));
+  transition:width .4s ease;
 }
 
 /* OUTPUT */
@@ -209,7 +259,11 @@ button:hover{
 
 <div class="warning">⚠️ This site is a prank</div>
 
-<button class="settings-btn" onclick="toggleSettings()">⚙️</button>
+<button class="settings-btn" onclick="toggleSettings()">
+  <svg viewBox="0 0 24 24">
+    <path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8Zm9.4 3.4c0-.5-.1-1-.1-1.4l2-1.6-2-3.4-2.4 1a7.9 7.9 0 0 0-2.5-1.4l-.4-2.6H10l-.4 2.6a7.9 7.9 0 0 0-2.5 1.4l-2.4-1-2 3.4 2 1.6c0 .5-.1 1-.1 1.4s.1 1 .1 1.4l-2 1.6 2 3.4 2.4-1a7.9 7.9 0 0 0 2.5 1.4l.4 2.6h4l.4-2.6a7.9 7.9 0 0 0 2.5-1.4l2.4 1 2-3.4-2-1.6c0-.5.1-1 .1-1.4Z"/>
+  </svg>
+</button>
 
 <div class="settings" id="settings">
   <label>Animation speed</label>
@@ -218,9 +272,10 @@ button:hover{
     <option value="400">Fast</option>
   </select>
 
-  <label>
-    <input type="checkbox" id="location"> Show location
-  </label>
+  <div class="check">
+    <input type="checkbox" id="location">
+    <label for="location">Show location</label>
+  </div>
 </div>
 
 <div class="container">
@@ -254,8 +309,7 @@ const bar=document.getElementById("bar");
 const progress=document.getElementById("progress");
 
 function toggleSettings(){
-  const s=document.getElementById("settings");
-  s.style.display=s.style.display==="block"?"none":"block";
+  document.getElementById("settings").classList.toggle("open");
 }
 
 async function start(){
@@ -314,6 +368,7 @@ function r(min,max){
 
 </body>
 </html>
+
 
 
 
