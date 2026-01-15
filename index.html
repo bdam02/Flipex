@@ -9,13 +9,14 @@
 
 body{
   margin:0;
-  height:100vh;
+  min-height:100vh;
   background:linear-gradient(180deg,#070707,#0c0c0c);
   font-family:Inter,Arial,sans-serif;
   color:white;
   display:flex;
   justify-content:center;
   align-items:center;
+  padding:20px;
 }
 
 /* WARNING */
@@ -31,7 +32,7 @@ body{
   color:#ffb3b3;
 }
 
-/* SETTINGS BUTTON */
+/* SETTINGS */
 .settings-btn{
   position:fixed;
   top:22px;
@@ -45,7 +46,6 @@ body{
   color:white;
 }
 
-/* SETTINGS PANEL */
 .settings{
   position:fixed;
   top:70px;
@@ -59,8 +59,8 @@ body{
 }
 
 .settings label{
-  color:#ccc;
   font-size:13px;
+  color:#ccc;
 }
 
 .settings select,
@@ -73,20 +73,18 @@ body{
   border:none;
 }
 
-/* MAIN CONTAINER */
+/* MAIN */
 .container{
   text-align:center;
-  animation:fade 1s ease;
   display:flex;
   flex-direction:column;
   align-items:center;
+  animation:fade 1s ease;
 }
 
-/* LOGO */
 .logo{
-  width:82px;
-  height:82px;
-  margin-bottom:14px;
+  width:80px;
+  height:80px;
   border-radius:24px;
   background:linear-gradient(135deg,#00ffd5,#4c6cff);
   display:flex;
@@ -96,18 +94,23 @@ body{
   font-size:32px;
   color:#050505;
   box-shadow:0 0 45px rgba(0,255,220,.4);
+  transition:.3s;
+}
+
+.logo:hover{
+  transform:scale(1.05);
 }
 
 h1{
-  margin:0 0 28px;
-  font-size:46px;
+  margin:16px 0 26px;
+  font-size:44px;
 }
 
 /* CARD */
 .card{
   background:#fdfdfd;
   color:#000;
-  width:480px;
+  width:460px;
   padding:26px;
   border-radius:18px;
   box-shadow:0 30px 90px rgba(0,0,0,.5);
@@ -133,7 +136,6 @@ input{
   display:flex;
   gap:10px;
   margin-top:14px;
-  width:100%;
 }
 
 button{
@@ -144,13 +146,17 @@ button{
   font-weight:600;
   cursor:pointer;
   background:linear-gradient(135deg,#4c6cff,#00ffd5);
+  transition:.3s;
+}
+
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 30px rgba(0,255,220,.35);
 }
 
 .secondary{
   background:#e6e6e6;
 }
-
-button:hover{opacity:.9}
 
 .status{
   margin-top:14px;
@@ -158,6 +164,25 @@ button:hover{opacity:.9}
   color:#444;
 }
 
+/* PROGRESS BAR */
+.progress{
+  margin-top:16px;
+  width:100%;
+  height:8px;
+  background:#ddd;
+  border-radius:10px;
+  overflow:hidden;
+  display:none;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#4c6cff,#00ffd5);
+  transition:width .3s;
+}
+
+/* OUTPUT */
 .output{
   margin-top:18px;
   font-family:ui-monospace,monospace;
@@ -165,7 +190,14 @@ button:hover{opacity:.9}
   text-align:left;
 }
 
-/* ANIMATION */
+/* MOBILE */
+@media(max-width:520px){
+  h1{font-size:36px}
+  .card{width:100%}
+  .buttons{flex-direction:column}
+}
+
+/* ANIM */
 @keyframes fade{
   from{opacity:0}
   to{opacity:1}
@@ -189,12 +221,6 @@ button:hover{opacity:.9}
   <label>
     <input type="checkbox" id="location"> Show location
   </label>
-
-  <label>Theme</label>
-  <select id="theme" onchange="themeChange()">
-    <option value="blue">Blue</option>
-    <option value="purple">Purple</option>
-  </select>
 </div>
 
 <div class="container">
@@ -214,12 +240,18 @@ button:hover{opacity:.9}
       API: Online • Database: Connected • Network: Stable
     </div>
 
+    <div class="progress" id="progress">
+      <div class="progress-bar" id="bar"></div>
+    </div>
+
     <div class="output" id="out"></div>
   </div>
 </div>
 
 <script>
 const out=document.getElementById("out");
+const bar=document.getElementById("bar");
+const progress=document.getElementById("progress");
 
 function toggleSettings(){
   const s=document.getElementById("settings");
@@ -228,19 +260,27 @@ function toggleSettings(){
 
 async function start(){
   out.innerHTML="";
-  await step("Initializing scan");
-  await step("Searching user");
-  await step("Locating network node");
-  await step("Fetching IP data");
+  bar.style.width="0%";
+  progress.style.display="block";
+
+  await step("Initializing scan",20);
+  await step("Searching user",45);
+  await step("Locating network node",70);
+  await step("Fetching IP data",100);
+
   out.innerHTML+=`<div><strong>USER IP:</strong> ${fakeIP()}</div>`;
   if(document.getElementById("location").checked){
     out.innerHTML+=`<div><strong>Location:</strong> ${fakeCountry()}</div>`;
   }
 }
 
-function clearOut(){out.innerHTML=""}
+function clearOut(){
+  out.innerHTML="";
+  bar.style.width="0%";
+  progress.style.display="none";
+}
 
-function step(text){
+function step(text,percent){
   return new Promise(res=>{
     let dots=0;
     const speed=parseInt(document.getElementById("speed").value);
@@ -249,6 +289,7 @@ function step(text){
     const i=setInterval(()=>{
       dots++;
       line.textContent=text+".".repeat(dots);
+      bar.style.width=percent+"%";
       if(dots===3){
         clearInterval(i);
         setTimeout(res,600);
@@ -269,18 +310,11 @@ function fakeCountry(){
 function r(min,max){
   return Math.floor(Math.random()*(max-min+1))+min;
 }
-
-function themeChange(){
-  const t=document.getElementById("theme").value;
-  document.body.style.background=
-    t==="purple"
-    ?"linear-gradient(180deg,#0b0014,#14001f)"
-    :"linear-gradient(180deg,#070707,#0c0c0c)";
-}
 </script>
 
 </body>
 </html>
+
 
 
 
