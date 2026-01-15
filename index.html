@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Flipex</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px);
+      z-index: 10;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .container {
+      margin-top: 120px;
+      padding: 40px;
+      min-height: 200vh;
+      animation: fadeIn 1.2s ease;
+    }
+
+    .box {
+      background: white;
+      color: black;
+      max-width: 600px;
+      padding: 25px;
+      border-radius: 10px;
+      margin-top: 200px;
+      animation: slideUp 1s ease;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .output {
+      margin-top: 15px;
+      font-family: monospace;
+    }
+
+    .disclaimer {
+      margin-top: 30px;
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Flipex</h1>
+</header>
+
+<div class="container">
+  <p>Scroll down ↓</p>
+
+  <div class="box">
+    <label>Discord user:</label>
+    <input id="userInput" placeholder="username#0000" />
+
+    <div class="output" id="output"></div>
+
+    <div class="disclaimer">
+      ⚠️ Demo / fake IP finder. No real data is collected.
+    </div>
+  </div>
+</div>
+
+<script>
+  const input = document.getElementById("userInput");
+  const output = document.getElementById("output");
+
+  input.addEventListener("keydown", async (e) => {
+    if (e.key === "Enter") {
+      output.innerHTML = "";
+      await loading("Searching user");
+      await loading("Searching for IP");
+      output.innerHTML += `<div>USER IP: ${fakeIP()}</div>`;
+    }
+  });
+
+  function fakeIP() {
+    return `${rand(100,999)}-${rand(1000,9999)}-${rand(1000,9999)}`;
+  }
+
+  function rand(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function loading(text) {
+    return new Promise(resolve => {
+      let dots = 0;
+      const line = document.createElement("div");
+      output.appendChild(line);
+
+      const interval = setInterval(() => {
+        dots++;
+        line.textContent = text + ".".repeat(dots);
+        if (dots === 3) {
+          clearInterval(interval);
+          setTimeout(resolve, 400);
+        }
+      }, 400);
+    });
+  }
+</script>
+
+</body>
+</html>
