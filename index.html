@@ -6,23 +6,25 @@
 <title>Flipex</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  font-family:Inter,system-ui,Segoe UI,Arial;
-}
-
+*{box-sizing:border-box;font-family:Inter,system-ui,Arial}
 body{
   margin:0;
-  min-height:100vh;
   background:radial-gradient(circle at top,#0f172a,#020617);
   color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
   overflow-x:hidden;
 }
 
-/* ---------- SETTINGS BUTTON ---------- */
+/* WARNING */
+.warning{
+  position:fixed;
+  top:16px;
+  right:20px;
+  font-size:11px;
+  opacity:.6;
+  z-index:5;
+}
+
+/* SETTINGS BTN */
 .settings-btn{
   position:fixed;
   top:20px;
@@ -37,49 +39,30 @@ body{
   justify-content:center;
   cursor:pointer;
   transition:.3s;
-  box-shadow:0 0 20px rgba(96,165,250,.15);
 }
-
 .settings-btn:hover{
   transform:scale(1.1) rotate(15deg);
-  box-shadow:0 0 30px rgba(96,165,250,.4);
 }
-
-/* SVG animation */
 .settings-btn svg{
   width:22px;
   height:22px;
   animation:spin 12s linear infinite;
 }
+@keyframes spin{to{transform:rotate(360deg)}}
 
-@keyframes spin{
-  from{transform:rotate(0)}
-  to{transform:rotate(360deg)}
-}
-
-/* ---------- SETTINGS PANEL ---------- */
+/* SETTINGS PANEL */
 .settings{
   position:fixed;
-  top:0;
-  left:0;
-  height:100%;
+  inset:0 auto 0 0;
   width:300px;
   background:rgba(15,23,42,.95);
   backdrop-filter:blur(12px);
   padding:24px;
   transform:translateX(-110%);
   transition:.45s cubic-bezier(.4,0,.2,1);
-  z-index:10;
+  z-index:4;
 }
-
-.settings.open{
-  transform:translateX(0);
-}
-
-.settings h2{
-  margin-top:0;
-}
-
+.settings.open{transform:translateX(0)}
 .settings label{
   display:flex;
   align-items:center;
@@ -87,9 +70,16 @@ body{
   margin:14px 0;
 }
 
-/* ---------- MAIN CARD ---------- */
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+}
 .card{
-  width:92%;
+  width:100%;
   max-width:420px;
   background:rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.12);
@@ -97,33 +87,23 @@ body{
   padding:30px;
   text-align:center;
   box-shadow:0 0 40px rgba(0,0,0,.6);
-  animation:fadeUp .8s ease;
 }
-
-@keyframes fadeUp{
-  from{opacity:0; transform:translateY(20px)}
-  to{opacity:1; transform:none}
-}
-
 .logo{
-  font-size:34px;
+  font-size:36px;
   font-weight:800;
-  letter-spacing:1px;
+  margin-bottom:8px;
 }
-
 input{
   width:100%;
   padding:14px;
   border-radius:12px;
   border:none;
-  margin-top:20px;
   background:#020617;
   color:white;
-  outline:none;
+  margin-top:16px;
 }
-
 button{
-  margin-top:18px;
+  margin-top:16px;
   width:100%;
   padding:14px;
   border-radius:12px;
@@ -134,23 +114,18 @@ button{
   cursor:pointer;
   transition:.3s;
 }
-
 button:hover{
   transform:translateY(-2px);
   box-shadow:0 10px 25px rgba(59,130,246,.4);
 }
 
-/* ---------- AI PANEL ---------- */
-.ai-panel{
-  margin-top:22px;
-  background:rgba(255,255,255,.04);
-  border-radius:12px;
-  padding:14px;
+/* AI PANEL */
+.ai{
+  display:none;
+  margin-top:20px;
   text-align:left;
   font-size:13px;
-  display:none;
 }
-
 .progress{
   height:6px;
   background:#020617;
@@ -158,28 +133,51 @@ button:hover{
   overflow:hidden;
   margin-top:10px;
 }
-
 .bar{
   height:100%;
   width:0%;
   background:linear-gradient(90deg,#22d3ee,#3b82f6);
-  transition:width .4s;
+  transition:width .6s;
 }
 
-/* ---------- WARNING ---------- */
-.warning{
-  position:fixed;
-  top:18px;
-  right:20px;
+/* IP INFOS */
+.section{
+  padding:80px 20px;
+  display:flex;
+  justify-content:center;
+}
+.ip-card{
+  width:100%;
+  max-width:520px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  padding:26px;
+}
+.ip-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:16px;
+}
+.ip-box{
+  background:#020617;
+  padding:12px;
+  border-radius:10px;
+  font-size:13px;
+}
+footer{
+  text-align:center;
   font-size:11px;
-  opacity:.6;
+  opacity:.5;
+  padding:20px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="warning">⚠️ This site is a prank</div>
+<div class="warning">⚠️ This site is a prank / fake analysis</div>
 
 <div class="settings-btn" onclick="toggleSettings()">
 <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
@@ -190,30 +188,42 @@ button:hover{
 
 <div class="settings" id="settings">
 <h2>Settings</h2>
-<label><input type="checkbox" checked> Enable AI Analysis</label>
+<label><input type="checkbox" checked> Enable AI visuals</label>
 <label><input type="checkbox" checked> Smooth animations</label>
 </div>
 
+<div class="hero">
 <div class="card">
 <div class="logo">Flipex</div>
 <input id="user" placeholder="Discord user">
 <button onclick="startScan()">Start Scan</button>
 
-<div class="ai-panel" id="ai">
-<div id="aiText">Initializing AI engine…</div>
+<div class="ai" id="ai">
+<div id="aiText">Initializing…</div>
 <div class="progress"><div class="bar" id="bar"></div></div>
 </div>
 </div>
+</div>
+
+<div class="section">
+<div class="ip-card">
+<h3>IP Infos</h3>
+<input id="ipInput" placeholder="Enter IP address">
+<button onclick="fakeIP()">Analyze IP</button>
+
+<div class="ip-grid" id="ipData"></div>
+</div>
+</div>
+
+<footer>Flipex © Fake AI Interface</footer>
 
 <script>
 function toggleSettings(){
   document.getElementById("settings").classList.toggle("open");
 }
 
-function randIP(){
-  return `${rand(10,255)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`;
-}
-function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+function randIP(){return `${rand(11,223)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`}
 
 function startScan(){
   const ai=document.getElementById("ai");
@@ -224,25 +234,45 @@ function startScan(){
 
   const steps=[
     "Initializing neural engine…",
-    "Loading AI model v4.2…",
-    "Analyzing user patterns…",
-    "Correlating network data…",
+    "Loading AI model…",
+    "Analyzing patterns…",
+    "Correlating data…",
+    "Finalizing analysis…",
     `USER IP: ${randIP()}`
   ];
 
   let i=0;
   function next(){
     txt.textContent=steps[i];
-    bar.style.width=`${(i+1)*20}%`;
+    bar.style.width=`${(i+1)*16.6}%`;
     i++;
-    if(i<steps.length) setTimeout(next,600);
+    if(i<steps.length) setTimeout(next,1000);
   }
   next();
+}
+
+function fakeIP(){
+  const data=document.getElementById("ipData");
+  const infos=[
+    ["Country","Canada"],
+    ["City","Montreal"],
+    ["ISP","CloudNet Services"],
+    ["Device","Desktop"],
+    ["Latency",rand(20,120)+" ms"],
+    ["Risk Level",["Low","Medium","High"][rand(0,2)]],
+    ["AI Confidence",rand(70,99)+"%"],
+    ["Routing","Dynamic"]
+  ];
+  data.innerHTML="";
+  infos.forEach(i=>{
+    data.innerHTML+=`<div class="ip-box"><b>${i[0]}</b><br>${i[1]}</div>`;
+  });
 }
 </script>
 
 </body>
 </html>
+
 
 
 
