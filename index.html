@@ -1,139 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Flipex</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b0b0b;
-      color: white;
-      overflow-x: hidden;
-    }
+<meta charset="UTF-8">
+<title>Flipex</title>
 
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      padding: 20px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(10px);
-      z-index: 10;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    h1 {
-      margin: 0;
-      font-size: 24px;
-    }
+body {
+  margin: 0;
+  height: 100vh;
+  background: #0a0a0a;
+  font-family: Arial, sans-serif;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .container {
-      margin-top: 120px;
-      padding: 40px;
-      min-height: 200vh;
-      animation: fadeIn 1.2s ease;
-    }
+.main {
+  text-align: center;
+  animation: fadeIn 1.2s ease;
+}
 
-    .box {
-      background: white;
-      color: black;
-      max-width: 600px;
-      padding: 25px;
-      border-radius: 10px;
-      margin-top: 200px;
-      animation: slideUp 1s ease;
-    }
+/* LOGO */
+.logo {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #00ffd5, #0066ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 28px;
+  color: black;
+}
 
-    input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-    }
+/* TITLE */
+h1 {
+  margin: 0 0 30px;
+  font-size: 42px;
+}
 
-    .output {
-      margin-top: 15px;
-      font-family: monospace;
-    }
+/* SCRIPT BOX */
+.box {
+  background: #ffffff;
+  color: #000;
+  width: 420px;
+  padding: 25px;
+  border-radius: 12px;
+  animation: slideUp 1s ease;
+}
 
-    .disclaimer {
-      margin-top: 30px;
-      font-size: 12px;
-      color: #aaa;
-    }
+label {
+  display: block;
+  text-align: left;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+}
 
-    @keyframes slideUp {
-      from { transform: translateY(40px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-  </style>
+.output {
+  margin-top: 15px;
+  font-family: monospace;
+  text-align: left;
+}
+
+.disclaimer {
+  margin-top: 15px;
+  font-size: 11px;
+  color: #666;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0 }
+  to { transform: translateY(0); opacity: 1 }
+}
+</style>
 </head>
+
 <body>
 
-<header>
+<div class="main">
+  <div class="logo">FX</div>
   <h1>Flipex</h1>
-</header>
-
-<div class="container">
-  <p>Scroll down ↓</p>
 
   <div class="box">
     <label>Discord user:</label>
-    <input id="userInput" placeholder="username#0000" />
+    <input id="userInput" placeholder="username#0000">
 
     <div class="output" id="output"></div>
 
     <div class="disclaimer">
-      ⚠️ Demo / fake IP finder. No real data is collected.
+      ⚠️ Demo / simulation only. No real IP data is collected.
     </div>
   </div>
 </div>
 
 <script>
-  const input = document.getElementById("userInput");
-  const output = document.getElementById("output");
+const input = document.getElementById("userInput");
+const output = document.getElementById("output");
 
-  input.addEventListener("keydown", async (e) => {
-    if (e.key === "Enter") {
-      output.innerHTML = "";
-      await loading("Searching user");
-      await loading("Searching for IP");
-      output.innerHTML += `<div>USER IP: ${fakeIP()}</div>`;
-    }
+input.addEventListener("keydown", async (e) => {
+  if (e.key === "Enter") {
+    output.innerHTML = "";
+    await loading("Searching user");
+    await loading("Searching for IP");
+    output.innerHTML += `<div>USER IP: ${fakeIPv4()}</div>`;
+  }
+});
+
+function loading(text) {
+  return new Promise(resolve => {
+    let dots = 0;
+    const line = document.createElement("div");
+    output.appendChild(line);
+
+    const interval = setInterval(() => {
+      dots++;
+      line.textContent = text + ".".repeat(dots);
+      if (dots === 3) {
+        clearInterval(interval);
+        setTimeout(resolve, 1000);
+      }
+    }, 1000);
   });
+}
 
-  function fakeIP() {
-    return `${rand(100,999)}-${rand(1000,9999)}-${rand(1000,9999)}`;
-  }
+function fakeIPv4() {
+  return `${rand(1,223)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`;
+}
 
-  function rand(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  function loading(text) {
-    return new Promise(resolve => {
-      let dots = 0;
-      const line = document.createElement("div");
-      output.appendChild(line);
-
-      const interval = setInterval(() => {
-        dots++;
-        line.textContent = text + ".".repeat(dots);
-        if (dots === 3) {
-          clearInterval(interval);
-          setTimeout(resolve, 400);
-        }
-      }, 400);
-    });
-  }
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 </script>
 
 </body>
 </html>
+
