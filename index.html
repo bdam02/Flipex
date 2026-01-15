@@ -30,6 +30,7 @@ body {
   font-size: 12px;
   color: var(--red);
   opacity: 0.7;
+  z-index: 1000;
 }
 
 .container {
@@ -64,7 +65,6 @@ input {
   background: #0c0c0c;
   border: 1px solid #222;
   color: white;
-  font-size: 14px;
 }
 
 button {
@@ -76,11 +76,6 @@ button {
   color: black;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.2s;
-}
-
-button:hover {
-  opacity: 0.8;
 }
 
 .error {
@@ -97,7 +92,6 @@ button:hover {
 .dots span {
   animation: blink 1.8s infinite;
 }
-
 .dots span:nth-child(2){animation-delay:.6s}
 .dots span:nth-child(3){animation-delay:1.2s}
 
@@ -116,6 +110,7 @@ button:hover {
   padding: 20px;
   display: none;
   overflow-y: auto;
+  z-index: 999;
 }
 
 pre {
@@ -165,7 +160,7 @@ pre {
 
 <!-- RESULTS -->
 <div id="results">
-  <h2>IP Informations ↓</h2>
+  <h2>IP Informations</h2>
   <div class="result-box" id="info"></div>
 </div>
 
@@ -196,35 +191,35 @@ function openTerminal(){
   termText.textContent = "";
 
   const lines = [
-`███████╗██╗     ██╗██████╗ ███████╗██╗  ██╗
-██╔════╝██║     ██║██╔══██╗██╔════╝╚██╗██╔╝
-█████╗  ██║     ██║██████╔╝█████╗   ╚███╔╝ 
-██╔══╝  ██║     ██║██╔═══╝ ██╔══╝   ██╔██╗ 
-██║     ███████╗██║██║     ███████╗██╔╝ ██╗
-╚═╝     ╚══════╝╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝
-
-FLIPEX OSINT FRAMEWORK
------------------------------
-[+] Initializing modules
-[+] Loading AI analysis
-[+] Resolving user
-[+] Scanning network
-[+] Enumerating ports
-[+] Generating report
-[!] Fake data mode enabled
-[✓] Done`
+"███████╗██╗     ██╗██████╗ ███████╗██╗  ██╗",
+"██╔════╝██║     ██║██╔══██╗██╔════╝╚██╗██╔╝",
+"█████╗  ██║     ██║██████╔╝█████╗   ╚███╔╝ ",
+"██╔══╝  ██║     ██║██╔═══╝ ██╔══╝   ██╔██╗ ",
+"██║     ███████╗██║██║     ███████╗██╔╝ ██╗",
+"╚═╝     ╚══════╝╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝",
+"",
+"[+] Initializing FLIPEX core",
+"[+] Injecting OSINT modules",
+"[+] Parsing Discord identity",
+"[+] Resolving network path",
+"[+] Scanning open ports",
+"[+] Collecting metadata",
+"[+] Running AI correlation",
+"[+] Generating logs",
+"[!] Fake data mode enabled",
+"[✓] Process completed successfully"
   ];
 
   let i = 0;
   const interval = setInterval(()=>{
-    termText.textContent += lines[0].split("\n")[i] + "\n";
+    termText.textContent += lines[i] + "\n";
     terminal.scrollTop = terminal.scrollHeight;
     i++;
-    if(i >= lines[0].split("\n").length){
+    if(i >= lines.length){
       clearInterval(interval);
-      setTimeout(closeTerminal, 1200);
+      setTimeout(closeTerminal, 1800);
     }
-  }, 120);
+  }, 250); // plus lent = plus réaliste
 }
 
 function closeTerminal(){
@@ -232,16 +227,17 @@ function closeTerminal(){
   showResults();
 }
 
-function randomIP(){
-  return `${rand(1,223)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`;
-}
-
 function rand(min,max){
   return Math.floor(Math.random()*(max-min+1))+min;
 }
 
+function randomIP(){
+  return `${rand(1,223)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`;
+}
+
 function showResults(){
-  document.getElementById("results").style.display = "block";
+  const results = document.getElementById("results");
+  results.style.display = "block";
 
   document.getElementById("info").innerHTML = `
 <b>IP:</b> ${randomIP()}<br>
@@ -251,11 +247,16 @@ function showResults(){
 <b>Open Ports:</b> 80, 443, 22<br>
 <b>Risk Level:</b> LOW
 `;
+
+  setTimeout(()=>{
+    results.scrollIntoView({ behavior: "smooth" });
+  }, 300);
 }
 </script>
 
 </body>
 </html>
+
 
 
 
