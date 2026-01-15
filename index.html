@@ -5,117 +5,108 @@
 <title>Flipex</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
 body {
   margin: 0;
   height: 100vh;
-  background: radial-gradient(circle at top, #111 0%, #050505 60%);
+  background: linear-gradient(180deg, #060606, #0b0b0b);
   font-family: Inter, Arial, sans-serif;
   color: white;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
-/* PRANK WARNING */
 .warning {
   position: fixed;
-  top: 18px;
-  right: 24px;
+  top: 16px;
+  right: 22px;
   font-size: 12px;
-  color: #ffb3b3;
-  background: rgba(255, 80, 80, 0.12);
-  border: 1px solid rgba(255, 80, 80, 0.3);
   padding: 6px 12px;
   border-radius: 20px;
-  backdrop-filter: blur(10px);
+  background: rgba(255,80,80,0.15);
+  border: 1px solid rgba(255,80,80,0.35);
+  color: #ffb3b3;
 }
 
-/* MAIN */
-.main {
+.container {
   text-align: center;
-  animation: fadeIn 1.2s ease;
+  animation: fade 1s ease;
 }
 
-/* LOGO */
 .logo {
-  width: 76px;
-  height: 76px;
-  margin: 0 auto 20px;
-  border-radius: 22px;
-  background: linear-gradient(135deg, #00ffe0, #4a6cff);
+  width: 80px;
+  height: 80px;
+  margin: auto;
+  border-radius: 24px;
+  background: linear-gradient(135deg,#00ffd5,#4c6cff);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 900;
-  font-size: 30px;
+  font-size: 32px;
   color: #050505;
-  box-shadow: 0 0 40px rgba(0,255,220,0.35);
+  box-shadow: 0 0 45px rgba(0,255,220,0.4);
 }
 
-/* TITLE */
 h1 {
-  margin: 0 0 32px;
-  font-size: 44px;
-  letter-spacing: 1px;
+  margin: 20px 0 30px;
+  font-size: 46px;
 }
 
-/* CARD */
-.box {
-  background: rgba(255,255,255,0.95);
+.card {
+  background: #fdfdfd;
   color: #000;
-  width: 440px;
-  padding: 28px;
-  border-radius: 16px;
-  box-shadow: 0 25px 80px rgba(0,0,0,0.45);
-  animation: slideUp 1s ease;
+  width: 460px;
+  padding: 26px;
+  border-radius: 18px;
+  box-shadow: 0 30px 90px rgba(0,0,0,0.5);
 }
 
 label {
   display: block;
   text-align: left;
-  margin-bottom: 8px;
   font-weight: 600;
+  margin-bottom: 6px;
 }
 
 input {
   width: 100%;
   padding: 12px;
-  font-size: 15px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  font-size: 15px;
 }
 
-input:focus {
-  outline: none;
-  border-color: #4a6cff;
+button {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  background: linear-gradient(135deg,#4c6cff,#00ffd5);
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.status {
+  margin-top: 16px;
+  font-size: 13px;
+  color: #444;
 }
 
 .output {
   margin-top: 18px;
-  font-family: ui-monospace, SFMono-Regular, monospace;
-  text-align: left;
+  font-family: ui-monospace, monospace;
   font-size: 14px;
 }
 
-.disclaimer {
-  margin-top: 18px;
-  font-size: 11px;
-  color: #666;
-}
-
-/* ANIMATIONS */
-@keyframes fadeIn {
-  from { opacity: 0 }
-  to { opacity: 1 }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(40px); opacity: 0 }
-  to { transform: translateY(0); opacity: 1 }
+@keyframes fade {
+  from {opacity:0}
+  to {opacity:1}
 }
 </style>
 </head>
@@ -124,62 +115,62 @@ input:focus {
 
 <div class="warning">⚠️ This site is a prank</div>
 
-<div class="main">
+<div class="container">
   <div class="logo">FX</div>
   <h1>Flipex</h1>
 
-  <div class="box">
+  <div class="card">
     <label>Discord user</label>
-    <input id="userInput" placeholder="username#0000">
+    <input id="user" placeholder="username#0000">
+    <button onclick="start()">Start scan</button>
 
-    <div class="output" id="output"></div>
-
-    <div class="disclaimer">
-      Demo / prank website. No real IPs or personal data are used.
+    <div class="status">
+      API: Online • Database: Connected • Network: Stable
     </div>
+
+    <div class="output" id="out"></div>
   </div>
 </div>
 
 <script>
-const input = document.getElementById("userInput");
-const output = document.getElementById("output");
+const out = document.getElementById("out");
 
-input.addEventListener("keydown", async (e) => {
-  if (e.key === "Enter") {
-    output.innerHTML = "";
-    await loading("Searching user");
-    await loading("Searching for IP");
-    output.innerHTML += `<div><strong>USER IP:</strong> ${fakeIPv4()}</div>`;
-  }
-});
+async function start() {
+  out.innerHTML = "";
+  await step("Initializing scan");
+  await step("Searching user");
+  await step("Locating network node");
+  await step("Fetching IP data");
+  out.innerHTML += `<div><strong>USER IP:</strong> ${fakeIP()}</div>`;
+}
 
-function loading(text) {
-  return new Promise(resolve => {
+function step(text) {
+  return new Promise(res => {
     let dots = 0;
     const line = document.createElement("div");
-    output.appendChild(line);
-
-    const interval = setInterval(() => {
+    out.appendChild(line);
+    const i = setInterval(() => {
       dots++;
       line.textContent = text + ".".repeat(dots);
       if (dots === 3) {
-        clearInterval(interval);
-        setTimeout(resolve, 1000);
+        clearInterval(i);
+        setTimeout(res, 800);
       }
-    }, 1000);
+    }, 800);
   });
 }
 
-function fakeIPv4() {
-  return `${rand(1,223)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`;
+function fakeIP() {
+  return `${r(1,223)}.${r(0,255)}.${r(0,255)}.${r(1,254)}`;
 }
 
-function rand(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+function r(min,max){
+  return Math.floor(Math.random()*(max-min+1))+min;
 }
 </script>
 
 </body>
 </html>
+
 
 
