@@ -12,14 +12,29 @@
 body {
   margin: 0;
   height: 100vh;
-  background: #0a0a0a;
-  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #111 0%, #050505 60%);
+  font-family: Inter, Arial, sans-serif;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* PRANK WARNING */
+.warning {
+  position: fixed;
+  top: 18px;
+  right: 24px;
+  font-size: 12px;
+  color: #ffb3b3;
+  background: rgba(255, 80, 80, 0.12);
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  padding: 6px 12px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+/* MAIN */
 .main {
   text-align: center;
   animation: fadeIn 1.2s ease;
@@ -27,32 +42,35 @@ body {
 
 /* LOGO */
 .logo {
-  width: 70px;
-  height: 70px;
+  width: 76px;
+  height: 76px;
   margin: 0 auto 20px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #00ffd5, #0066ff);
+  border-radius: 22px;
+  background: linear-gradient(135deg, #00ffe0, #4a6cff);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 28px;
-  color: black;
+  font-weight: 900;
+  font-size: 30px;
+  color: #050505;
+  box-shadow: 0 0 40px rgba(0,255,220,0.35);
 }
 
 /* TITLE */
 h1 {
-  margin: 0 0 30px;
-  font-size: 42px;
+  margin: 0 0 32px;
+  font-size: 44px;
+  letter-spacing: 1px;
 }
 
-/* SCRIPT BOX */
+/* CARD */
 .box {
-  background: #ffffff;
+  background: rgba(255,255,255,0.95);
   color: #000;
-  width: 420px;
-  padding: 25px;
-  border-radius: 12px;
+  width: 440px;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.45);
   animation: slideUp 1s ease;
 }
 
@@ -60,23 +78,31 @@ label {
   display: block;
   text-align: left;
   margin-bottom: 8px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   font-size: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4a6cff;
 }
 
 .output {
-  margin-top: 15px;
-  font-family: monospace;
+  margin-top: 18px;
+  font-family: ui-monospace, SFMono-Regular, monospace;
   text-align: left;
+  font-size: 14px;
 }
 
 .disclaimer {
-  margin-top: 15px;
+  margin-top: 18px;
   font-size: 11px;
   color: #666;
 }
@@ -88,7 +114,7 @@ input {
 }
 
 @keyframes slideUp {
-  from { transform: translateY(30px); opacity: 0 }
+  from { transform: translateY(40px); opacity: 0 }
   to { transform: translateY(0); opacity: 1 }
 }
 </style>
@@ -96,18 +122,20 @@ input {
 
 <body>
 
+<div class="warning">⚠️ This site is a prank</div>
+
 <div class="main">
   <div class="logo">FX</div>
   <h1>Flipex</h1>
 
   <div class="box">
-    <label>Discord user:</label>
+    <label>Discord user</label>
     <input id="userInput" placeholder="username#0000">
 
     <div class="output" id="output"></div>
 
     <div class="disclaimer">
-      ⚠️ Demo / simulation only. No real IP data is collected.
+      Demo / prank website. No real IPs or personal data are used.
     </div>
   </div>
 </div>
@@ -121,7 +149,7 @@ input.addEventListener("keydown", async (e) => {
     output.innerHTML = "";
     await loading("Searching user");
     await loading("Searching for IP");
-    output.innerHTML += `<div>USER IP: ${fakeIPv4()}</div>`;
+    output.innerHTML += `<div><strong>USER IP:</strong> ${fakeIPv4()}</div>`;
   }
 });
 
@@ -153,5 +181,5 @@ function rand(min, max) {
 
 </body>
 </html>
-<!-- redeploy -->
+
 
