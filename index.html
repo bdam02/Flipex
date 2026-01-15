@@ -2,276 +2,261 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>FLIPEX</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flipex</title>
 
 <style>
-:root{
-  --bg:#020617;
-  --card:#020617e6;
-  --border:rgba(255,255,255,.1);
-  --accent:#ef4444;
-  --cyan:#22d3ee;
-  --text:#e5e7eb;
+:root {
+  --red: #ff2a2a;
+  --dark: #050505;
 }
 
-*{box-sizing:border-box;font-family:Inter,system-ui}
-
-body{
-  margin:0;
-  background:radial-gradient(circle at top,#020617,#000);
-  color:var(--text);
-  min-height:100vh;
+* {
+  box-sizing: border-box;
+  font-family: "JetBrains Mono", monospace;
 }
 
-/* WARNING */
-.warning{
-  position:fixed;
-  top:14px;
-  right:18px;
-  font-size:12px;
-  opacity:.65;
-  z-index:1000;
+body {
+  margin: 0;
+  background: var(--dark);
+  color: white;
+  overflow-x: hidden;
 }
 
-/* MAIN */
-.container{
-  max-width:650px;
-  margin:auto;
-  padding:60px 20px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:28px;
+.warning {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  font-size: 12px;
+  color: var(--red);
+  opacity: 0.7;
 }
 
-.logo{
-  width:90px;height:90px;
-  border-radius:22px;
-  background:linear-gradient(135deg,#22d3ee,#0ea5e9);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-  font-size:28px;
-  color:#020617;
-  box-shadow:0 0 40px #22d3ee66;
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.card{
-  width:100%;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:24px;
+.card {
+  text-align: center;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
 }
 
-input,button{
-  width:100%;
-  height:52px;
-  border-radius:14px;
-  font-size:15px;
+.logo {
+  font-size: 48px;
+  color: var(--red);
+  letter-spacing: 6px;
+  margin-bottom: 15px;
 }
 
-input{
-  background:#020617;
-  border:1px solid rgba(255,255,255,.2);
-  color:white;
-  padding:0 14px;
+.subtitle {
+  opacity: 0.6;
+  margin-bottom: 30px;
 }
 
-button{
-  margin-top:14px;
-  background:linear-gradient(135deg,#22d3ee,#0ea5e9);
-  border:none;
-  font-weight:700;
-  cursor:pointer;
-  transition:.25s;
-}
-button:hover{transform:translateY(-2px)}
-
-.error{
-  margin-top:10px;
-  color:#ef4444;
-  font-size:14px;
-  display:none;
+input {
+  width: 100%;
+  padding: 14px;
+  background: #0c0c0c;
+  border: 1px solid #222;
+  color: white;
+  font-size: 14px;
 }
 
-.loader{
-  margin-top:16px;
-  min-height:22px;
-  opacity:.85;
+button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 14px;
+  background: var(--red);
+  border: none;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.error {
+  color: var(--red);
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.loading {
+  margin-top: 15px;
+  display: none;
+}
+
+.dots span {
+  animation: blink 1.8s infinite;
+}
+
+.dots span:nth-child(2){animation-delay:.6s}
+.dots span:nth-child(3){animation-delay:1.2s}
+
+@keyframes blink {
+  0%{opacity:0}
+  50%{opacity:1}
+  100%{opacity:0}
+}
+
+/* TERMINAL */
+#terminal {
+  position: fixed;
+  inset: 0;
+  background: black;
+  color: var(--red);
+  padding: 20px;
+  display: none;
+  overflow-y: auto;
+}
+
+pre {
+  white-space: pre-wrap;
+  font-size: 13px;
 }
 
 /* RESULTS */
-.result{
-  margin-top:18px;
-  font-size:20px;
-  color:var(--cyan);
-  font-weight:700;
-}
-.ipinfo{
-  margin-top:10px;
-  font-size:14px;
-  opacity:.9;
+#results {
+  display: none;
+  padding: 40px;
 }
 
-/* TERMINAL FULLSCREEN */
-.terminal-screen{
-  position:fixed;
-  inset:0;
-  background:black;
-  display:none;
-  flex-direction:column;
-  padding:20px;
-  z-index:999;
+.result-box {
+  background: #0b0b0b;
+  border: 1px solid #222;
+  padding: 20px;
+  margin-top: 20px;
 }
-
-.term-title{
-  color:var(--accent);
-  font-size:22px;
-  font-weight:900;
-  margin-bottom:10px;
-}
-
-.term-body{
-  flex:1;
-  color:#22d3ee;
-  font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size:14px;
-  white-space:pre-wrap;
-  overflow-y:auto;
-}
-.cursor{
-  display:inline-block;
-  width:10px;
-  animation:blink 1s steps(1) infinite;
-}
-@keyframes blink{50%{opacity:0}}
 </style>
 </head>
 
 <body>
 
-<div class="warning">⚠️ This site is a prank – no real data is accessed</div>
+<div class="warning">⚠ This site is a prank (fake data)</div>
 
 <div class="container">
-  <div class="logo">FX</div>
-  <h1>Flipex</h1>
-
   <div class="card">
+    <div class="logo">FLIPEX</div>
+    <div class="subtitle">OSINT Interface</div>
+
     <input id="user" placeholder="Discord user">
     <button onclick="start()">Search</button>
-    <div class="error" id="error">This field must be filled</div>
-    <div class="loader" id="loader"></div>
 
-    <div class="result" id="ip"></div>
-    <div class="ipinfo" id="ipinfo"></div>
+    <div class="error" id="error"></div>
+
+    <div class="loading" id="loading">
+      Searching user<span class="dots"><span>.</span><span>.</span><span>.</span></span>
+    </div>
   </div>
 </div>
 
 <!-- TERMINAL -->
-<div class="terminal-screen" id="terminalScreen">
-  <div class="term-title">FLIPEX :: OSINT TERMINAL</div>
-  <div class="term-body" id="terminal"></div>
+<div id="terminal">
+<pre id="termText"></pre>
+</div>
+
+<!-- RESULTS -->
+<div id="results">
+  <h2>IP Informations ↓</h2>
+  <div class="result-box" id="info"></div>
 </div>
 
 <script>
-const userInput=document.getElementById("user");
-const error=document.getElementById("error");
-const loader=document.getElementById("loader");
-const screen=document.getElementById("terminalScreen");
-const terminal=document.getElementById("terminal");
-const ipBox=document.getElementById("ip");
-const infoBox=document.getElementById("ipinfo");
+const terminal = document.getElementById("terminal");
+const termText = document.getElementById("termText");
 
-function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
-function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
-function randIP(){
- return `${rand(1,255)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`
-}
-function time(){
- const d=new Date();
- return d.toLocaleTimeString();
-}
+function start(){
+  const user = document.getElementById("user").value.trim();
+  document.getElementById("error").textContent = "";
 
-async function dots(text){
- loader.textContent=text;
- for(let i=0;i<3;i++){
-  await sleep(600);
-  loader.textContent+=".";
- }
+  if(!user){
+    document.getElementById("error").textContent =
+      "This field must not be empty";
+    return;
+  }
+
+  document.getElementById("loading").style.display = "block";
+
+  setTimeout(()=>{
+    document.getElementById("loading").style.display = "none";
+    openTerminal();
+  }, 6000);
 }
 
-async function start(){
- error.style.display="none";
- loader.textContent="";
- ipBox.textContent="";
- infoBox.textContent="";
+function openTerminal(){
+  terminal.style.display = "block";
+  termText.textContent = "";
 
- if(userInput.value.trim()===""){
-   error.style.display="block";
-   return;
- }
+  const lines = [
+`███████╗██╗     ██╗██████╗ ███████╗██╗  ██╗
+██╔════╝██║     ██║██╔══██╗██╔════╝╚██╗██╔╝
+█████╗  ██║     ██║██████╔╝█████╗   ╚███╔╝ 
+██╔══╝  ██║     ██║██╔═══╝ ██╔══╝   ██╔██╗ 
+██║     ███████╗██║██║     ███████╗██╔╝ ██╗
+╚═╝     ╚══════╝╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝
 
- await dots("searching user");
- await dots("initializing scan");
- loader.textContent="";
- await openTerminal();
+FLIPEX OSINT FRAMEWORK
+-----------------------------
+[+] Initializing modules
+[+] Loading AI analysis
+[+] Resolving user
+[+] Scanning network
+[+] Enumerating ports
+[+] Generating report
+[!] Fake data mode enabled
+[✓] Done`
+  ];
+
+  let i = 0;
+  const interval = setInterval(()=>{
+    termText.textContent += lines[0].split("\n")[i] + "\n";
+    terminal.scrollTop = terminal.scrollHeight;
+    i++;
+    if(i >= lines[0].split("\n").length){
+      clearInterval(interval);
+      setTimeout(closeTerminal, 1200);
+    }
+  }, 120);
 }
 
-async function typeLine(line){
- terminal.innerHTML+=line;
- terminal.scrollTop=terminal.scrollHeight;
- await sleep(450);
- terminal.innerHTML+="\n";
+function closeTerminal(){
+  terminal.style.display = "none";
+  showResults();
 }
 
-async function openTerminal(){
- screen.style.display="flex";
- terminal.innerHTML="";
- const fakeIP=randIP();
-
- const logs=[
-  `[${time()}] CORE_BOOT_START`,
-  `[${time()}] MEMORY_OK`,
-  `[${time()}] AI_ENGINE_SYNCED`,
-  ``,
-  `[TARGET] ${userInput.value}`,
-  `[IP] ${fakeIP}`,
-  ``,
-  `[${time()}] ROUTE_ANALYSIS_STARTED`,
-  `[${time()}] PACKET_FLOW_SIMULATION`,
-  `[${time()}] PORT_ENUMERATION_FAKE`,
-  `[${time()}] DATA_CORRELATION`,
-  ``,
-  `[${time()}] STATUS: SIMULATION_COMPLETE`
- ];
-
- for(const l of logs){
-   await typeLine(l);
- }
-
- terminal.innerHTML+=`<span class="cursor">█</span>`;
- await sleep(1200);
-
- screen.style.display="none";
- showResults(fakeIP);
+function randomIP(){
+  return `${rand(1,223)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`;
 }
 
-function showResults(ip){
- ipBox.textContent="USER IP: "+ip;
- infoBox.innerHTML=`
-  Country: ${["Canada","France","Germany","Japan"][rand(0,3)]}<br>
-  ISP: ${["QuantumNet","CloudFiber","NeoISP"][rand(0,2)]}<br>
-  Latency: ${rand(12,85)} ms<br>
-  Risk Level: ${rand(10,90)}%
- `;
+function rand(min,max){
+  return Math.floor(Math.random()*(max-min+1))+min;
+}
+
+function showResults(){
+  document.getElementById("results").style.display = "block";
+
+  document.getElementById("info").innerHTML = `
+<b>IP:</b> ${randomIP()}<br>
+<b>Country:</b> ${["Canada","France","Germany","Japan"][rand(0,3)]}<br>
+<b>City:</b> ${["Montreal","Paris","Berlin","Tokyo"][rand(0,3)]}<br>
+<b>ISP:</b> ${["CloudNet","NovaLink","FiberX"][rand(0,2)]}<br>
+<b>Open Ports:</b> 80, 443, 22<br>
+<b>Risk Level:</b> LOW
+`;
 }
 </script>
 
 </body>
 </html>
+
 
 
 
