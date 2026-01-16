@@ -8,7 +8,7 @@
 <style>
 :root {
   --red: #ff2a2a;
-  --dark: #050505;
+  --bg: #050505;
 }
 
 * {
@@ -18,21 +18,23 @@
 
 body {
   margin: 0;
-  background: var(--dark);
+  background: var(--bg);
   color: white;
   overflow-x: hidden;
 }
 
+/* WARNING */
 .warning {
   position: fixed;
-  top: 15px;
-  right: 20px;
+  top: 12px;
+  right: 18px;
   font-size: 12px;
   color: var(--red);
   opacity: 0.7;
   z-index: 1000;
 }
 
+/* MAIN */
 .container {
   min-height: 100vh;
   display: flex;
@@ -51,7 +53,7 @@ body {
   font-size: 48px;
   color: var(--red);
   letter-spacing: 6px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .subtitle {
@@ -165,9 +167,15 @@ pre {
 </div>
 
 <script>
+/* AUDIO */
+const terminalSound = new Audio("keyboard-typing-sound-effect-335503.mp3");
+terminalSound.volume = 0.25;
+
+/* ELEMENTS */
 const terminal = document.getElementById("terminal");
 const termText = document.getElementById("termText");
 
+/* START */
 function start(){
   const user = document.getElementById("user").value.trim();
   document.getElementById("error").textContent = "";
@@ -186,6 +194,7 @@ function start(){
   }, 6000);
 }
 
+/* TERMINAL */
 function openTerminal(){
   terminal.style.display = "block";
   termText.textContent = "";
@@ -199,34 +208,39 @@ function openTerminal(){
 "╚═╝     ╚══════╝╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝",
 "",
 "[+] Initializing FLIPEX core",
-"[+] Injecting OSINT modules",
-"[+] Parsing Discord identity",
-"[+] Resolving network path",
-"[+] Scanning open ports",
-"[+] Collecting metadata",
-"[+] Running AI correlation",
+"[+] Loading OSINT modules",
+"[+] Resolving identity",
+"[+] Enumerating network",
+"[+] Scanning ports",
+"[+] Correlating metadata",
 "[+] Generating logs",
 "[!] Fake data mode enabled",
-"[✓] Process completed successfully"
+"[✓] Scan completed"
   ];
 
   let i = 0;
   const interval = setInterval(()=>{
     termText.textContent += lines[i] + "\n";
     terminal.scrollTop = terminal.scrollHeight;
+
+    terminalSound.currentTime = 0;
+    terminalSound.play();
+
     i++;
     if(i >= lines.length){
       clearInterval(interval);
-      setTimeout(closeTerminal, 1800);
+      setTimeout(closeTerminal, 2000);
     }
-  }, 250); // plus lent = plus réaliste
+  }, 300);
 }
 
+/* CLOSE TERMINAL */
 function closeTerminal(){
   terminal.style.display = "none";
   showResults();
 }
 
+/* RANDOM DATA */
 function rand(min,max){
   return Math.floor(Math.random()*(max-min+1))+min;
 }
@@ -235,6 +249,7 @@ function randomIP(){
   return `${rand(1,223)}.${rand(0,255)}.${rand(0,255)}.${rand(1,254)}`;
 }
 
+/* RESULTS */
 function showResults(){
   const results = document.getElementById("results");
   results.style.display = "block";
@@ -256,6 +271,7 @@ function showResults(){
 
 </body>
 </html>
+
 
 
 
